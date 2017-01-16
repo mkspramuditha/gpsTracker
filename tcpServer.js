@@ -4,7 +4,7 @@ var validator = require('./validator.js');
 var HOST = '127.0.0.1';
 var PORT = 6969;
 
-validator.validate("shan");
+console.log(validator.deviceList);
 
 net.createServer(function(sock) {
 
