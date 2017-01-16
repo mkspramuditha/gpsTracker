@@ -11,7 +11,9 @@ module.exports.formatter = function(){
         var startbit = dataArray[0]+dataArray[1];
         var packetLength = dataArray[2];
         var protocolNumber = dataArray[3];
-        var data = dataArray.slice(4,parseInt(packetLength, 16)-2);
+        var data = dataArray.slice(4,parseInt(packetLength, 16)-1);
+        console.log(dataArray);
+        console.log(data);
         var serialNumber = dataArray[-6]+dataArray[-5];
         var errorCheck = dataArray[-4]+dataArray[-3];
         var stopBit = dataArray[-2] + dataArray[-1];
@@ -47,8 +49,8 @@ module.exports.formatter = function(){
     };
 
     this.getCordinate = function(point){
-        var point  = (parseInt(cordinate.join(""),16)/1800000);
-        return point;
+        var cordinate  = (parseInt(point.join(""),16)/1800000);
+        return cordinate;
     };
 
 

@@ -8,7 +8,8 @@ formatter = new formatter.formatter();
 var HOST = '127.0.0.1';
 var PORT = 4444;
 
-validator.validate("sd");
+var clients = {};
+
 
 net.createServer(function(sock) {
 
@@ -16,13 +17,18 @@ net.createServer(function(sock) {
     // console.log('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
 
     sock.on('data', function(data) {
+        var addr = sock.remoteAddress+':'+sock.remotePort;
 
-        formatter.format(data);
+        var formatedObj = formatter.format(data);
+        if(formatedObj.type = "01"){
+            clients[addr] = formatedObj.imei;
+        }
 
     });
 
     sock.on('close', function(data) {
-        // console.log('CLOSED: ' + sock.remoteAddress +' '+ sock.remotePort);
+        var addr = sock.remoteAddress+':'+sock.remotePort;
+        delete clients[addr];
     });
 
 }).listen(PORT, HOST);
