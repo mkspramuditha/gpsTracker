@@ -1,6 +1,6 @@
-module.exports.validator = function(mm,r){
+module.exports.validator = function(){
 
-    this.deviceList = [];
+    this.deviceList = ["ds"];
     this.unknownDeviceList = [];
 
     this.validate = function (message) {

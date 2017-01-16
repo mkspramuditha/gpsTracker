@@ -1,10 +1,11 @@
 var net = require('net');
-var validator = require('./validator.js');
+var validator= require('./validator.js');
+validator = new validator.validator();
 
 var HOST = '127.0.0.1';
-var PORT = 6969;
+var PORT = 4444;
 
-console.log(validator.deviceList);
+validator.validate("sd");
 
 net.createServer(function(sock) {
 
