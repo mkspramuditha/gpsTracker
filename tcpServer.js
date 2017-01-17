@@ -21,10 +21,12 @@ net.createServer(function(sock) {
     sock.on('data', function(data) {
         var addr = sock.remoteAddress+':'+sock.remotePort;
 
-        var formatedObj = formatter.format(data);
+        var formatedObj = formatter.format(data, clients[addr]);
         if(formatedObj.type = "01"){
             clients[addr] = formatedObj.imei;
         }
+
+
 
         controller.store(data);
 
