@@ -22,15 +22,15 @@ net.createServer(function(sock) {
         var addr = sock.remoteAddress+':'+sock.remotePort;
 
         var formattedObj = formatter.format(data, clients[addr]);
-        if(formatedObj.type = "01"){
-            clients[addr] = formatedObj.imei;
+        if(formattedObj.type = "01"){
+            clients[addr] = formattedObj.imei;
         }
 
-        var obj = validator.validator(formattedObj);
+        var obj = validator.validate(formattedObj);
 
-        controller.store(obj);
+        console.log("validate - msg -   "+obj);
 
-        controller.sendWS(obj);
+        controller.send(obj);
 
     });
 

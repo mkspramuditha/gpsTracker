@@ -5,12 +5,13 @@ module.exports.validator = function(){
 
     this.validate = function (data ) {
         // console.log(message);
+        console.log(data);
         if(this.deviceList.indexOf(data.imei)>-1){
             data.number = this.deviceList[data.imei];
             return data;
         }
         else {
-            if(this.unknownDeviceList.indexOf(data.imei)){
+            if(this.unknownDeviceList.indexOf(data.imei)<-1){
                 return false;
             }
 
