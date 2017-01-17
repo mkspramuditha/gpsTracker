@@ -30,8 +30,8 @@ module.exports.formatter = function(){
         }
         else if(protocolNumber == "12"){
             var time = this.time(data.slice(0,6));
-            var latitude = this.getCordinate(data.slice(7,11));
-            var longitude = this.getCordinate(data.slice(11,15));
+            var latitude = this.getCoordinate(data.slice(7,11));
+            var longitude = this.getCoordinate(data.slice(11,15));
             var speed = parseInt(data[15],16);
 
             return {"imei": imeiNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed};
