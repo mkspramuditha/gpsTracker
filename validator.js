@@ -3,20 +3,20 @@ module.exports.validator = function(){
     this.deviceList = [];
     this.unknownDeviceList = [];
 
-    this.validate = function (data , emie) {
+    this.validate = function (data ) {
         // console.log(message);
-        if(this.deviceList.indexOf(emie)>-1){
-            data.number = this.deviceList[emie];
+        if(this.deviceList.indexOf(data.imei)>-1){
+            data.number = this.deviceList[data.imei];
             return data;
         }
         else {
-            if(this.unknownDeviceList.indexOf(emie)){
+            if(this.unknownDeviceList.indexOf(data.imei)){
                 return false;
             }
 
-            if(this.checkDatabase(emie)){
+            if(this.checkDatabase(data.imei)){
                 var number  = 1234;
-                this.deviceList[emie] = number;
+                this.deviceList[data.imei] = number;
                 data.number = number;
                 return data;
             }
@@ -26,7 +26,7 @@ module.exports.validator = function(){
         }
     };
 
-    this.checkDatabase = function (emie) {
+    this.checkDatabase = function (imei) {
         return true;
     }
 
