@@ -20,6 +20,16 @@ module.exports.temporaryStore = function() {
         client.set(key, JSON.stringify(data));
     }
 
+    this.findFromTimeRange = function (startDate, endDate , type , client) {
+        client.keys('*', function (err, keys) {
+            if (err) return console.log(err);
+            for(var i = 0, len = keys.length; i < len; i++) {
+                console.log(keys[i]);
+            }
+        });
+
+    }
+
 
 
 };

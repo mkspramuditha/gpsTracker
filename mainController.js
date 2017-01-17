@@ -13,12 +13,12 @@ module.exports.controller = function() {
     this.send = function(message){
         temporaryStore(message,client);
         sendWs(message);
-    }
+    };
 
     function temporaryStore(message,client) {
         // client.set("dsd", message);
         store.store(message,client);
-    };
+    }
     
 
     function sendWs(message) {
