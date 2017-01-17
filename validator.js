@@ -3,10 +3,11 @@ module.exports.validator = function(){
     this.deviceList = [];
     this.unknownDeviceList = [];
 
-    this.validate = function (emie) {
+    this.validate = function (data , emie) {
         // console.log(message);
         if(this.deviceList.indexOf(emie)>-1){
-            return true;
+            data.number = this.deviceList[emie];
+            return data;
         }
         else {
             if(this.unknownDeviceList.indexOf(emie)){
@@ -14,8 +15,10 @@ module.exports.validator = function(){
             }
 
             if(this.checkDatabase(emie)){
-                this.deviceList.push(emie);
-                return true;
+                var number  = 1234;
+                this.deviceList[emie] = number;
+                data.number = number;
+                return data;
             }
             else{
                 return false;
