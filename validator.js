@@ -5,7 +5,7 @@ module.exports.validator = function(){
 
     this.validate = function (data ) {
         // console.log(message);
-        console.log(data);
+        // console.log(data);
         if(this.deviceList.indexOf(data.imei)>-1){
             data.number = this.deviceList[data.imei];
             return data;

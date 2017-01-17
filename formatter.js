@@ -22,11 +22,11 @@ module.exports.formatter = function(){
         var errorCheck = dataArray[length-4]+dataArray[length-3];
         var stopBit = dataArray[length-2] + dataArray[length-1];
         // console.log(dataArray);
-        console.log(startbit);
-        console.log(stopBit);
+        // console.log(startbit);
+        // console.log(stopBit);
 
         if(startbit !="7878" || stopBit != "0d0a"){
-            console.log("startbit");
+            // console.log("startbit");
             return false;
 
         }
