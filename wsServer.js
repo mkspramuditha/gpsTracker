@@ -2,7 +2,7 @@
  * Created by shan on 1/17/17.
  */
 
-module.exports.formatter = function() {
+module.exports.wsServer = function() {
 
     var jwt = require('jsonwebtoken');
     var token = jwt.sign({name: 'shan'}, 'secret-key');
@@ -46,7 +46,9 @@ module.exports.formatter = function() {
         });
     });
 
-    this.sendLocation = function (message, name) {
-        clients[name].send(message);
+    this.sendLocation = function (message) {
+        if(clients[message.number] != null){
+            clients[message.number].send(message);
+        }
     }
 };
