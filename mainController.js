@@ -4,12 +4,16 @@ module.exports.controller = function() {
     var client = redis.createClient(6379,'127.0.0.1');
     this.data = "";
     
-    
-    this.store = function (data) {
-        client.set("dsd", data);
+    this.send = function(message){
+        temporaryStore(message);
+        sendWs(message);
+    }
+
+    function temporaryStore(message) {
+        client.set("dsd", message);
     };
     
-    this.sendWS = function (data, ) {
+    function sendWs(message) {
         
     }
 
