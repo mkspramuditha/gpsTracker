@@ -28,7 +28,9 @@ net.createServer(function(sock) {
 
         var obj = validator.validator(formattedObj);
 
-        controller.store(data);
+        controller.store(obj);
+
+        controller.sendWS(obj);
 
     });
 
