@@ -3,7 +3,8 @@
  */
 module.exports.formatter = function(){
 
-    this.format = function (message, emieNo) {
+    this.format = function (message, imeiNo) {
+
         var dataArray = message.toString('hex').match(/.{1,2}/g);
         if(dataArray.length <=10){
             return false;
@@ -33,7 +34,7 @@ module.exports.formatter = function(){
             var longitude = this.getCordinate(data.slice(11,15));
             var speed = parseInt(data[15],16);
 
-            return {"emie": emieNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed};
+            return {"imei": imeiNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed};
         }
     };
 
@@ -48,9 +49,9 @@ module.exports.formatter = function(){
         return year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second;
     };
 
-    this.getCordinate = function(point){
-        var cordinate  = (parseInt(point.join(""),16)/1800000);
-        return cordinate;
+    this.getCoordinate = function(point){
+        var coordinate  = (parseInt(point.join(""),16)/1800000);
+        return coordinate;
     };
 
 
