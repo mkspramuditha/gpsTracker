@@ -8,13 +8,18 @@ module.exports.controller = function() {
 
     wss = new wss.wsServer();
     
-    
-    this.store = function (data) {
-        client.set("dsd", data);
+    this.send = function(message){
+        temporaryStore(message);
+        sendWs(message);
+    }
+
+    function temporaryStore(message) {
+        client.set("dsd", message);
     };
     
-    this.sendWS = function (data) {
-        wss.sendLocation(data)
+
+    function sendWs(message) {
+        wss.sendLocation(message)
     }
 
 };

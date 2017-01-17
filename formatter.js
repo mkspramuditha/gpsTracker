@@ -29,16 +29,16 @@ module.exports.formatter = function(){
             return {"type":protocolNumber,"imei":imei};
         }
         else if(protocolNumber == "12"){
-            var time = this.time(data.slice(0,6));
-            var latitude = this.getCoordinate(data.slice(7,11));
-            var longitude = this.getCoordinate(data.slice(11,15));
+            var time = time(data.slice(0,6));
+            var latitude = getCoordinate(data.slice(7,11));
+            var longitude = getCoordinate(data.slice(11,15));
             var speed = parseInt(data[15],16);
 
             return {"imei": imeiNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed};
         }
     };
 
-    this.time = function (time) {
+    function time(time) {
         var year = (parseInt(time[0],16)+2000).toString();
         var month = parseInt(time[1],16).toString();
         var day = parseInt(time[2],16).toString();
@@ -49,7 +49,7 @@ module.exports.formatter = function(){
         return year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second;
     };
 
-    this.getCoordinate = function(point){
+    function getCoordinate(point){
         var coordinate  = (parseInt(point.join(""),16)/1800000);
         return coordinate;
     };
