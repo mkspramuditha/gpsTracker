@@ -1,9 +1,11 @@
 var net = require('net');
 var validator= require('./validator.js');
 var formatter= require('./formatter.js');
+var controller = require('./mainController');
 
 validator = new validator.validator();
 formatter = new formatter.formatter();
+controller = new controller.controller();
 
 var HOST = '127.0.0.1';
 var PORT = 4444;
@@ -23,6 +25,8 @@ net.createServer(function(sock) {
         if(formatedObj.type = "01"){
             clients[addr] = formatedObj.imei;
         }
+
+        controller.store(data);
 
     });
 
