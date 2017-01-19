@@ -32,11 +32,7 @@ net.createServer(function(sock) {
             }else {
                 console.log('validation failed for imei : '+formattedObj.imei)
             }
-
-
         });
-
-
     });
 
     sock.on('close', function(data) {

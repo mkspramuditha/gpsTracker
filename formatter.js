@@ -45,6 +45,7 @@ module.exports.formatter = function(){
             return {"imei": imeiNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed};
         }
         else if(protocolNumber == "13"){
+            //TODO this is required
 
         }
         else if(protocolNumber == "15"){

@@ -7,7 +7,7 @@ module.exports.temporaryStore = function() {
     var client = redis.createClient(6379,'127.0.0.1');
 
     this.store = function (data) {
-        addToRedis(data,client);
+        addToRedis(data);
     };
 
     function addToRedis(data, client) {
@@ -23,7 +23,7 @@ module.exports.temporaryStore = function() {
         client.set(key, JSON.stringify(data));
     }
 
-    this.findFromTimeRange = function (startDate, endDate , type , client) {
+    this.findFromTimeRange = function (startDate, endDate , type) {
         client.keys('*', function (err, keys) {
             if (err) return console.log(err);
             for(var i = 0, len = keys.length; i < len; i++) {

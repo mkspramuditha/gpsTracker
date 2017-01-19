@@ -18,7 +18,7 @@ module.exports.controller = function() {
 
     function temporaryStore(message,client) {
         // client.set("dsd", message);
-        store.store(message,client);
+        store.store(message);
     }
 
     function sendWs(message) {
