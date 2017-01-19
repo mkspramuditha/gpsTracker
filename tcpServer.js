@@ -25,11 +25,17 @@ net.createServer(function(sock) {
             clients[addr] = formattedObj.imei;
         }
 
-        var obj = validator.validate(formattedObj);
+        validator.validate(formattedObj,function(isValid){
+            if(isValid){
+                console.log("validate - msg -   "+formattedObj);
+                controller.send(formattedObj);
+            }else {
+                console.log('validation failed for imei : '+formattedObj.imei)
+            }
 
-        console.log("validate - msg -   "+obj);
 
-        controller.send(obj);
+        });
+
 
     });
 
