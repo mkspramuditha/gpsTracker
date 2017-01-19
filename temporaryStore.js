@@ -3,7 +3,10 @@
  */
 module.exports.temporaryStore = function() {
 
-    this.store = function (data, client) {
+    var redis = require('redis');
+    var client = redis.createClient(6379,'127.0.0.1');
+
+    this.store = function (data) {
         addToRedis(data,client);
     };
 
