@@ -1,7 +1,7 @@
 /**
  * Created by dar on 1/19/17.
  */
-module.exports.outRequest = function(){
+module.exports.httpClient = function(){
 
     var request = require('request');
 
@@ -12,19 +12,18 @@ module.exports.outRequest = function(){
 
 
     function sendToTestServer(message){
+
         console.log('request send');
 
         var options = {
             uri: 'http://localhost:3000/data',
             method: 'POST',
-            json: {
-                "longUrl": JSON.stringify(message)
-            }
+            json: true,
+            body: {"message": JSON.stringify(message)}
         };
 
-        request('http://localhost:3000/data-test');
-
         request(options, function (error, response, body) {
+
             console.log(response.statusCode);
 
             if (!error && response.statusCode == 200) {

@@ -6,11 +6,11 @@ module.exports.controller = function() {
 
     var wss = require('./wsServer');
     var store = require('./temporaryStore.js');
-    var outRequest = require('./outRequest.js');
+    var httpClient = require('./httpClient.js');
     store = new store.temporaryStore();
 
     wss = new wss.wsServer();
-    outRequest = new outRequest.outRequest();
+    httpClient = new httpClient.httpClient();
     
     this.send = function(message){
         temporaryStore(message,client);
@@ -28,7 +28,7 @@ module.exports.controller = function() {
     }
 
     function sendHTTP(message){
-        outRequest.send(message);
+        httpClient.send(message);
     }
 
 };

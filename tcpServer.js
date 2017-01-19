@@ -15,7 +15,6 @@ var clients = {};
 
 net.createServer(function(sock) {
 
-
     // console.log('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
 
     sock.on('data', function(data) {
