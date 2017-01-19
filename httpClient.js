@@ -15,11 +15,14 @@ module.exports.httpClient = function(){
 
         console.log('request send');
 
+        //request body should be formatted according to this
+        var body = { "s":"imei number","t":"yyyy-mm-dd hh:mm:ss","lg":"longitude","lt":"latitude","v":"speed km/h","d":"direction 0-359 degrees (a.k.a azimuth)","l":"1-GPS,0-GPRS","i":"1-on,0-off","m":"mileage()","al":"altitude","ac":"acceleration"}
+
         var options = {
             uri: 'http://localhost:3000/data',
             method: 'POST',
             json: true,
-            body: {"message": JSON.stringify(message)}
+            body: body
         };
 
         request(options, function (error, response, body) {

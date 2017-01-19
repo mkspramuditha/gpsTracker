@@ -18,7 +18,7 @@ app.post('/data', function (req, res) {
 
     console.log('post request');
     console.log(req.body);
-
+    winston.log('info',req.body);
     res.send('Hello World!');
 });
 

@@ -1,3 +1,6 @@
 
 {"level":"info","message":"Start test server!","timestamp":"2017-01-19T14:51:22.390Z"}
 {"level":"info","message":"Start test server!","timestamp":"2017-01-19T14:58:55.268Z"}
+{"level":"info","message":"Start test server!","timestamp":"2017-01-19T16:50:20.066Z"}
+{"s":"imei number","t":"yyyy-mm-dd hh:mm:ss","lg":"longitude","lt":"latitude","v":"speed km/h","d":"direction 0-359 degrees (a.k.a azimuth)","l":"1-GPS,0-GPRS","i":"1-on,0-off","m":"mileage()","al":"altitude","ac":"acceleration","level":"info","message":"","timestamp":"2017-01-19T16:50:22.637Z"}
+{"s":"imei number","t":"yyyy-mm-dd hh:mm:ss","lg":"longitude","lt":"latitude","v":"speed km/h","d":"direction 0-359 degrees (a.k.a azimuth)","l":"1-GPS,0-GPRS","i":"1-on,0-off","m":"mileage()","al":"altitude","ac":"acceleration","level":"info","message":"","timestamp":"2017-01-19T16:50:22.649Z"}
