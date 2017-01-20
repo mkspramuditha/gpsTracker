@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken');
 
 var token = jwt.sign({name:'1234'},'secret-key');
 
-ws = new WebSocket ('ws://localhost:8080    ',{
+ws = new WebSocket ('ws://localhost:8080',{
     headers : {
         token: token
     }

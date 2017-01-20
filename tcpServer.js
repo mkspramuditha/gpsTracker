@@ -15,7 +15,6 @@ var clients = {};
 
 net.createServer(function(sock) {
 
-
     // console.log('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
 
     sock.on('data', function(data) {
@@ -26,12 +25,14 @@ net.createServer(function(sock) {
             clients[addr] = formattedObj.imei;
         }
 
-        var obj = validator.validate(formattedObj);
-
-        console.log("validate - msg -   "+obj);
-
-        controller.send(obj);
-
+        validator.validate(formattedObj,function(isValid){
+            if(isValid){
+                console.log("validate - msg -   "+formattedObj);
+                controller.send(formattedObj);
+            }else {
+                console.log('validation failed for imei : '+formattedObj.imei)
+            }
+        });
     });
 
     sock.on('close', function(data) {
