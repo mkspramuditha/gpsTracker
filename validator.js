@@ -1,5 +1,8 @@
 module.exports.validator = function(){
 
+    var mongoose = require('mongoose');
+    var Device = require('./models/deviceModel');
+    var dbClient = mongoose.connect('mongodb://localhost/database');
     //device has two identities one is imei and other is unique tag ( which is used to
     // identify device by other systems which don't need to know about device imei number )
     // this device array should be a map of these two unique values ( imei(key) => tag(unique number) )
@@ -36,9 +39,19 @@ module.exports.validator = function(){
     };
 
     function checkDatabase(imei,callback) {
+
+        Device.findOne({ imei: imei  }, function(err, device) {
+            if (err) throw err;
+
+            if(device == null){
+                callback(false)
+            }
+            callback(true);
+        });
+
         //TODO implement db check functionality
         //this is a asynchronous function so only possible way is callback
-        callback(true);
+
     }
 
 };
