@@ -3,10 +3,10 @@ module.exports.validator = function(){
     //device has two identities one is imei and other is unique tag ( which is used to
     // identify device by other systems which don't need to know about device imei number )
     // this device array should be a map of these two unique values ( imei(key) => tag(unique number) )
-    var deviceList = [];
+    var deviceList = {};
     // resent unknown imei numbers
     //TODO add mechanism to auto remove unknown devices after 10 minutes
-    var unknownDeviceList = [];
+    var unknownDeviceList = {};
 
     this.validate = function (data,callback) {
         // console.log(message);
@@ -16,7 +16,7 @@ module.exports.validator = function(){
             callback(true);
         }
         else {
-            if(unknownDeviceList.indexOf(data.imei)<-1){
+            if( data.imei in unknownDeviceList){
                 callback(false);
             }else {
                 checkDatabase(data.imei,function(isExist){

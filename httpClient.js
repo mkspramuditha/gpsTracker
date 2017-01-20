@@ -7,7 +7,7 @@ module.exports.httpClient = function(){
 
     this.send = function(message){
         //TODO now all messages are send to all servers
-        sendToTestServer(message);
+        // sendToTestServer(message);
     };
 
 
