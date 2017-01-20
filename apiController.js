@@ -15,7 +15,8 @@ app.post('/device/add', function (request, response) {
 
     var device = new Device({
         imei: imei,
-        tag: tag
+        tag: tag,
+        isActive : true
     });
 
     device.save(function(err) {
@@ -30,20 +31,32 @@ app.post('/device/edit',function (request,response) {
     var imei = request.query.imei;
     var tag = request.query.tag;
 
-    Device.find({ imei: imei  }, function(err, device) {
+    Device.findOne({ imei: imei  }, function(err, device) {
         if (err) throw err;
 
         device.tag = tag;
 
         device.save(function(err) {
             if (err) throw err;
-            response.send('edit device');
+            response.send('Device update IMEI: '+imei+', TAG : '+ tag);
         });
     });
 });
 
-app.post('/device/remove', function (req,res) {
-    res.send('remove device');
+app.post('/device/remove', function (request,response) {
+
+    var imei = request.query.imei;
+    Device.findOne({ imei: imei},function (err,device) {
+        if (err) throw err;
+
+        device.isActive = false;
+
+        device.save(function (err) {
+            if(err) throw err;
+            response.send('Device removed successfully IMEI : '+imei);
+        })
+
+    });
 });
 
 

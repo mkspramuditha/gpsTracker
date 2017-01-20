@@ -7,8 +7,9 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var deviceSchema = new Schema({
-    imei: String,
-    tag: String
+    imei: { type: String, unique: true },
+    tag: String,
+    isActive: Boolean
 });
 
 // the schema is useless so far
