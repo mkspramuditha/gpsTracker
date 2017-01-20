@@ -18,9 +18,16 @@ var Device = require('./../models/deviceModel');
 //     console.log('Device saved successfully!');
 // });
 
-Device.find({}, function(err, users) {
+// Device.find({}, function(err, users) {
+//     if (err) throw err;
+//
+//     object of all the users
+    // console.log(users);
+// });
+
+Device.findOne({ imei: "sds"  }, function(err, device) {
     if (err) throw err;
 
-    // object of all the users
-    console.log(users);
+    console.log(device);
+
 });
