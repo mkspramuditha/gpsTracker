@@ -16,8 +16,14 @@ module.exports.temporaryStore = function() {
         client.set(key, JSON.stringify(message));
     };
 
-    this.getLastData = function (imei) {
-        getLastData(imei);
+    this.getLastData = function (imei,callback) {
+        var key = "l:"+imei;
+        client.get(key,function (err, value) {
+            if(value == null){
+                callback(false);
+            }
+            callback(JSON.parse(value));
+        });
     };
 
     this.getLastLocation = function(imei,callback){
@@ -70,16 +76,6 @@ module.exports.temporaryStore = function() {
         client.set(key, message);
     }
 
-    function getLastData(imei, callback) {
-        var key = "l:"+imei;
-        client.get(key,function (err, value) {
-            if(value == null){
-                callback(false);
-            }
-            callback(JSON.parse(value));
-        });
-
-    }
 
     this.findFromTimeRange = function (startDate, endDate , type) {
         client.keys('*', function (err, keys) {
