@@ -14,6 +14,7 @@ module.exports.modifier = function() {
         store.getLastData(message.imei,function (obj) {
             if(obj == false){
                 lastDataObj = {};
+
             }
             else {
                 lastDataObj = obj;
