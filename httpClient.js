@@ -7,7 +7,7 @@ module.exports.httpClient = function(){
 
     this.send = function(message){
         //TODO now all messages are send to all servers
-        // sendToTestServer(message);
+        sendToTestServer(message);
     };
 
 
@@ -15,14 +15,14 @@ module.exports.httpClient = function(){
 
         console.log('request send');
         var ignitionStatus;
-        if(message.info.alarm == "POWER_CUT"){
+        if(message.status.alarm == "POWER_CUT"){
             ignitionStatus = 0;
         }
         else{
             ignitionStatus = 1;
         }
         //request body should be formatted according to this
-        var body = { "s":message.imei,"t":message.time,"lg":message.longitude,"lt":message.latitude,"v":message.speed,"d":message.course.course,"l":1,"i":ignitionStatus,"m":0,"al":0.0,"ac":0}
+        var body = { "s":message.imei,"t":message.time,"lg":message.gps.longitude,"lt":message.gps.latitude,"v":message.gps.speed,"d":message.gps.course.course,"l":1,"i":ignitionStatus,"m":0,"al":0.0,"ac":0}
 
         var options = {
             uri: 'http://localhost:3000/data',

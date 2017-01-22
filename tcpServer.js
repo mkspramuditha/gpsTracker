@@ -30,14 +30,16 @@ net.createServer(function(sock) {
         validator.validate(formattedObj,function(isValid){
             if(isValid){
                 console.log("validate - msg -   "+formattedObj);
-                controller.send(formattedObj);
+                modifier.modify(formattedObj,function (modifiedObj) {
+                    controller.setLastData(modifiedObj);
+                    controller.send(modifiedObj);
+                });
+
             }else {
                 console.log('validation failed for imei : '+formattedObj.imei)
             }
 
-            modifier.modify(formattedObj,function (modifiedObj) {
-                controller.setLastData(modifiedObj);
-            });
+
 
         });
     });
