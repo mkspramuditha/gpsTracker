@@ -18,7 +18,7 @@ module.exports.httpClient = function(){
         console.log('request send');
 
         var ignitionStatus;
-        if(message.status.alarm == "POWER_CUT"){
+        if(typeof message.status !== 'undefined' && message.status.alarm == "POWER_CUT"){
             ignitionStatus = 0;
         }
         else{
@@ -36,10 +36,8 @@ module.exports.httpClient = function(){
 
         request(options, function (error, response, body) {
 
-            console.log(response.statusCode);
-
             if (!error && response.statusCode == 200) {
-                console.log(body.id); // Print the shortened url.
+                console.log('send http'); // Print the shortened url.
             }
         });
     }
