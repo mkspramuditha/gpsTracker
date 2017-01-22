@@ -75,8 +75,9 @@ module.exports.temporaryStore = function() {
         client.get(key,function (err, value) {
             if(value == null){
                 callback(false);
+            }else{
+                callback(JSON.parse(value));
             }
-            callback(JSON.parse(value));
         });
 
     }
