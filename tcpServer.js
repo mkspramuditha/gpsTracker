@@ -2,10 +2,12 @@ var net = require('net');
 var validator= require('./validator.js');
 var formatter= require('./formatter.js');
 var controller = require('./mainController');
+var modifier = require('./modifier');
 
 validator = new validator.validator();
 formatter = new formatter.formatter();
 controller = new controller.controller();
+modifier = new modifier.modifier();
 
 var HOST = '127.0.0.1';
 var PORT = 4444;
@@ -32,6 +34,11 @@ net.createServer(function(sock) {
             }else {
                 console.log('validation failed for imei : '+formattedObj.imei)
             }
+
+            modifier.modify(formattedObj,function (modifiedObj) {
+                controller.setLastData(modifiedObj);
+            });
+
         });
     });
 

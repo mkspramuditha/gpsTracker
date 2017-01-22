@@ -8,6 +8,16 @@ module.exports.temporaryStore = function() {
 
     this.store = function (data) {
         addToRedis(data,client);
+        setLastData(data);
+    };
+
+    this.setLastData = function (message) {
+        var key = "l:"+message.imei;
+        client.set(key, JSON.stringify(message));
+    };
+
+    this.getLastData = function (imei) {
+        getLastData(imei);
     };
 
     function addToRedis(data, client) {
@@ -21,6 +31,19 @@ module.exports.temporaryStore = function() {
         var dateTime = year+month+date+hour+minute+second
         var key = data.imei+":"+data.type+":"+dateTime;
         client.set(key, JSON.stringify(data));
+    }
+
+    function setLastData(message) {
+        var key = "l:"+message.imei;
+        client.set(key, message);
+    }
+
+    function getLastData(imei, callback) {
+        var key = "l:"+imei;
+        client.get(key,function (err, value) {
+            callback(JSON.parse(value));
+        });
+
     }
 
     this.findFromTimeRange = function (startDate, endDate , type) {
