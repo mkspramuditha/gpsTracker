@@ -16,6 +16,10 @@ module.exports.controller = function() {
         sendHTTP(message);
     };
 
+    this.setLastData = function (message) {
+      setLastData(message);
+    };
+
     function temporaryStore(message,client) {
         // client.set("dsd", message);
         store.store(message);
@@ -29,6 +33,10 @@ module.exports.controller = function() {
         if(message.type == '12'){
             httpClient.send(message);
         }
+    }
+
+    function setLastData(message) {
+        store.setLastData(message);
     }
 
 };

@@ -16,7 +16,7 @@ module.exports.httpClient = function(){
         console.log('request send');
 
         var ignitionStatus;
-        if(message.alarm == "POWER_CUT"){
+        if(message.info.alarm == "POWER_CUT"){
             ignitionStatus = 0;
         }
         else{
