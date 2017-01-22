@@ -31,7 +31,11 @@ net.createServer(function(sock) {
             if(isValid){
                 console.log("validate - msg -   "+formattedObj);
                 modifier.modify(formattedObj,function (modifiedObj) {
-                    controller.setLastData(modifiedObj);
+                    if(modifiedObj == false){
+
+                    }else{
+                        controller.setLastData(modifiedObj);
+                    }
                     controller.send(modifiedObj);
                 });
 
