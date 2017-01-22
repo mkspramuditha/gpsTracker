@@ -15,23 +15,24 @@ var clients = {};
 
 net.createServer(function(sock) {
 
-
     // console.log('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
 
     sock.on('data', function(data) {
         var addr = sock.remoteAddress+':'+sock.remotePort;
 
         var formattedObj = formatter.format(data, clients[addr]);
-        if(formatedObj.type = "01"){
-            clients[addr] = formatedObj.imei;
+        if(formattedObj.type = "01"){
+            clients[addr] = formattedObj.imei;
         }
 
-        var obj = validator.validator(formattedObj);
-
-        controller.store(obj);
-
-        controller.sendWS(obj);
-
+        validator.validate(formattedObj,function(isValid){
+            if(isValid){
+                console.log("validate - msg -   "+formattedObj);
+                controller.send(formattedObj);
+            }else {
+                console.log('validation failed for imei : '+formattedObj.imei)
+            }
+        });
     });
 
     sock.on('close', function(data) {

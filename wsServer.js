@@ -47,8 +47,11 @@ module.exports.wsServer = function() {
     });
 
     this.sendLocation = function (message) {
+        console.log("send");
+        console.log(message);
         if(clients[message.number] != null){
-            clients[message.number].send(message);
+            console.log(message+ "            dsd");
+            clients[message.number].send(JSON.stringify(message));
         }
     }
 };
