@@ -14,9 +14,15 @@ module.exports.httpClient = function(){
     function sendToTestServer(message){
 
         console.log('request send');
-
+        var ignitionStatus;
+        if(message.alarm == "POWER_CUT"){
+            ignitionStatus = 0;
+        }
+        else{
+            ignitionStatus = 1;
+        }
         //request body should be formatted according to this
-        var body = { "s":"imei number","t":"yyyy-mm-dd hh:mm:ss","lg":"longitude","lt":"latitude","v":"speed km/h","d":"direction 0-359 degrees (a.k.a azimuth)","l":"1-GPS,0-GPRS","i":"1-on,0-off","m":"mileage()","al":"altitude","ac":"acceleration"}
+        var body = { "s":message.imei,"t":message.time,"lg":message.longitude,"lt":message.latitude,"v":message.speed,"d":message.course.course,"l":1,"i":ignitionStatus,"m":0,"al":0.0,"ac":0}
 
         var options = {
             uri: 'http://localhost:3000/data',

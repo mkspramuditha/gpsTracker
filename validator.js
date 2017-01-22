@@ -33,8 +33,6 @@ module.exports.validator = function(){
                     }
                 })
             }
-
-
         }
     };
 
