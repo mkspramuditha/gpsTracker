@@ -71,10 +71,10 @@ module.exports.temporaryStore = function() {
         client.set(key, JSON.stringify(data));
     }
 
-    function setLastData(message) {
-        var key = "l:"+message.imei;
-        client.set(key, message);
-    }
+    // function setLastData(message) {
+    //     var key = "l:"+message.imei;
+    //     client.set(key, message);
+    // }
 
 
 
