@@ -73,6 +73,9 @@ module.exports.temporaryStore = function() {
     function getLastData(imei, callback) {
         var key = "l:"+imei;
         client.get(key,function (err, value) {
+            if(value == null){
+                callback(false);
+            }
             callback(JSON.parse(value));
         });
 
