@@ -10,7 +10,33 @@ module.exports.temporaryStore = function() {
         addToRedis(data,client);
     };
 
+    this.getLastLocation = function(imei,callback){
+
+    };
+
+    this.getTodayLocationHistory = function(imei,callback){
+
+    };
+
+    this.getLocationHistory = function(imei,callback){
+
+    };
+
+    this.getLastStatus = function (imei,callback) {
+
+    };
+
+    this.getTodayStatusHistory = function (imei,callback) {
+
+    };
+
+    this.getStatusHistory = function (imei,callback) {
+
+    };
+
     function addToRedis(data, client) {
+
+        //TODO date time should be get from message not from the server receive time
         var timeNow = new Date();
         var year = timeNow.getYear();
         var month = timeNow.getMonth()+1;
