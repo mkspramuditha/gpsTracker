@@ -36,10 +36,8 @@ module.exports.httpClient = function(){
 
         request(options, function (error, response, body) {
 
-            console.log(response.statusCode);
-
             if (!error && response.statusCode == 200) {
-                console.log(body.id); // Print the shortened url.
+                console.log('send http'); // Print the shortened url.
             }
         });
     }
