@@ -41,8 +41,9 @@ module.exports.formatter = function(){
             var latitude = getCoordinate(data.slice(7,11));
             var longitude = getCoordinate(data.slice(11,15));
             var speed = parseInt(data[15],16);
+            var courseStatus = getCourseStatus(data.slice(16,18));
 
-            return {"imei": imeiNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed};
+            return {"imei": imeiNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed,"course":courseStatus};
         }
         else if(protocolNumber == "13"){
             //TODO this is required
@@ -56,11 +57,12 @@ module.exports.formatter = function(){
             var latitude = getCoordinate(data.slice(7,11));
             var longitude = getCoordinate(data.slice(11,15));
             var speed = parseInt(data[15],16);
+            var courseStatus = getCourseStatus(data.slice(16,18));
             var info = getInformation(data[27]);
             var voltage = voltageLevel(data[28]);
             var gsm = gsmStrength(data[29]);
 
-            return {"imei": imeiNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed , "info":info, "voltageLevel":voltage,"gsm":gsm};
+            return {"imei": imeiNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed , "info":info, "voltageLevel":voltage,"gsm":gsm,"course": courseStatus};
 
         }
         else if(protocolNumber == "1a"){
@@ -190,6 +192,46 @@ module.exports.formatter = function(){
         else if(gsm == "04"){
             return "STRONG_SIGNAL";
         }
+    }
+
+    function getCourseStatus(course) {
+        var courseStatus = {};
+        var bitStream = parseInt(course[0],16).toString(2)+parseInt(course[1],16).toString();
+        var course = parseInt(bitStream.slice(6,16),2);
+        if(bitStream[2]=='0'){
+            courseStatus.gps = 'REAL_TIME';
+        }
+        else{
+            courseStatus.gps = 'DIFFERENTIAL_POSITIONING';
+        }
+        if(bitStream[3]=='0'){
+            courseStatus.position = 0;
+        }
+        else{
+            courseStatus.position = 1;
+        }
+
+        if(bitStream[4] == 0){
+            courseStatus.longitude = 'EAST';
+        }
+        else {
+            courseStatus.longitude = 'WEST';
+        }
+
+        if(bitStream[5] == 0){
+            courseStatus.latitude = 'SOUTH';
+        }
+        else {
+            courseStatus.latitude = 'NORTH';
+        }
+
+        courseStatus.course = course;
+
+        return courseStatus;
+
+
+
+
     }
 
 
