@@ -11,7 +11,7 @@ module.exports.temporaryStore = function() {
         setLastData(data);
     };
 
-    this.setLastData = function (message) {
+    function setLastData(message) {
         var key = "l:"+message.imei;
         client.set(key, JSON.stringify(message));
     };
@@ -21,38 +21,18 @@ module.exports.temporaryStore = function() {
         client.get(key,function (err, value) {
             if(value == null){
                 callback(false);
+            }else {
+                callback(JSON.parse(value));
             }
-            callback(JSON.parse(value));
         });
     };
 
-    this.getLastLocation = function(imei,callback){
-
-        var key = 'l:'+imei+':'+'12';
-        client.get(key, function(err, reply) {
-            console.log(reply);
-            callback(JSON.parse(reply));
-        });
-
-    };
 
     this.getTodayLocationHistory = function(imei,callback){
 
     };
 
     this.getLocationHistory = function(imei,callback){
-
-    };
-
-    this.getLastStatus = function (imei,callback) {
-
-    };
-
-    this.getTodayStatusHistory = function (imei,callback) {
-
-    };
-
-    this.getStatusHistory = function (imei,callback) {
 
     };
 
@@ -70,12 +50,6 @@ module.exports.temporaryStore = function() {
         var key = data.imei+":"+data.type+":"+dateTime;
         client.set(key, JSON.stringify(data));
     }
-
-    // function setLastData(message) {
-    //     var key = "l:"+message.imei;
-    //     client.set(key, message);
-    // }
-
 
 
     this.findFromTimeRange = function (startDate, endDate , type) {

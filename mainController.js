@@ -3,9 +3,9 @@ module.exports.controller = function() {
     this.data = "";
 
     var wss = require('./wsServer');
-    var store = require('./temporaryStore.js');
+    var tempStore = require('./temporaryStore.js');
     var httpClient = require('./httpClient.js');
-    store = new store.temporaryStore();
+    tempStore = new tempStore.temporaryStore();
 
     wss = new wss.wsServer();
     httpClient = new httpClient.httpClient();
@@ -16,13 +16,9 @@ module.exports.controller = function() {
         sendHTTP(message);
     };
 
-    this.setLastData = function (message) {
-      setLastData(message);
-    };
 
-    function temporaryStore(message,client) {
-        // client.set("dsd", message);
-        store.store(message);
+    function temporaryStore(message) {
+        tempStore.store(message);
     }
 
     function sendWs(message) {
@@ -35,8 +31,5 @@ module.exports.controller = function() {
         }
     }
 
-    function setLastData(message) {
-        store.setLastData(message);
-    }
 
 };

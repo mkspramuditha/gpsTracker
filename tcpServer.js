@@ -34,9 +34,8 @@ net.createServer(function(sock) {
                     if(modifiedObj == false){
 
                     }else{
-                        controller.setLastData(modifiedObj);
+                        controller.send(modifiedObj);
                     }
-                    controller.send(modifiedObj);
                 });
 
             }else {

@@ -20,16 +20,16 @@ module.exports.modifier = function() {
             }
 
             if(type == '01'){
-                lastDataObj.connection = 1;
-                lastDataObj.dateTime = message.time;
-                callback(lastDataObj);
+                callback(false);
             }
             else if(type == '12'){
+                lastDataObj.connection = 1;
                 lastDataObj.gps = {"latitude":message.latitude,"longitude": message.longitude,"speed":message.speed, "course":message.course};
                 lastDataObj.dateTime = message.time;
                 callback(lastDataObj);
             }
             else if(type == '16'){
+                lastDataObj.connection = 1;
                 lastDataObj.location = {"latitude":message.latitude,"longitude": message.longitude,"speed":message.speed, "course":message.course};
                 lastDataObj.dateTime = message.time;
                 lastDataObj.status = message.info;
