@@ -12,7 +12,12 @@ module.exports.modifier = function() {
         var type = message.type;
         var lastDataObj ;
         store.getLastData(message.imei,function (obj) {
-            lastDataObj = obj;
+            if(obj == false){
+                lastDataObj = {};
+            }
+            else {
+                lastDataObj = obj;
+            }
 
             if(type == '01'){
                 lastDataObj.connection = 1;
@@ -28,6 +33,8 @@ module.exports.modifier = function() {
                 lastDataObj.location = {"latitude":message.latitude,"longitude": message.longitude,"speed":message.speed, "course":message.course};
                 lastDataObj.dateTime = message.time;
                 lastDataObj.status = message.info;
+                lastDataObj.status.voltage = message.voltageLevel;
+                lastDataObj.status.gsm = message.gsm;
                 callback(lastDataObj);
             }
         });
