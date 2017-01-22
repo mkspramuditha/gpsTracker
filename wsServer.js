@@ -33,7 +33,7 @@ module.exports.wsServer = function() {
         }
     });
 
-    var clients = [];
+    var clients = {};
     wss.on('connection', function connection(ws) {
         var user = ws.upgradeReq.user;
         clients[user.name] = ws;
@@ -41,10 +41,17 @@ module.exports.wsServer = function() {
 
         // ws.send('Welcome! ' + user.name);
 
+        ws.on('close', function close() {
+            delete clients[extractKeyValue(clients,ws)];
+        });
+
+
         ws.on('message', function incoming(message) {
 
         });
     });
+
+
 
     this.sendLocation = function (message) {
         console.log("send");
@@ -53,5 +60,10 @@ module.exports.wsServer = function() {
             console.log(message+ "            dsd");
             clients[message.number].send(JSON.stringify(message));
         }
+    };
+
+
+    function extractKeyValue(obj, value) {
+        return Object.keys(obj)[Object.values(obj).indexOf(value)];
     }
 };
