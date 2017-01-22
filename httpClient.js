@@ -7,13 +7,14 @@ module.exports.httpClient = function(){
 
     this.send = function(message){
         //TODO now all messages are send to all servers
-        // sendToTestServer(message);
+         sendToTestServer(message);
     };
 
 
     function sendToTestServer(message){
 
         console.log('request send');
+
         var ignitionStatus;
         if(message.alarm == "POWER_CUT"){
             ignitionStatus = 0;

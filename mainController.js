@@ -26,7 +26,9 @@ module.exports.controller = function() {
     }
 
     function sendHTTP(message){
-        httpClient.send(message);
+        if(message.type == '12'){
+            httpClient.send(message);
+        }
     }
 
 };
