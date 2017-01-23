@@ -13,6 +13,7 @@ module.exports.controller = function() {
     httpClient = new httpClient.httpClient();
     
     this.send = function(message){
+
         temporaryStore(message);
         sendWs(message);
         sendHTTP(message);
