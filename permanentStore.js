@@ -9,7 +9,7 @@ module.exports.permanentStore = function() {
     var Device = require('./models/deviceModel');
     var History = require('./models/dataHistoryModel');
 
-    this.get = function(imei,tag,isActive,callback){
+    this.getDevices = function(imei,tag,isActive,callback){
         imei = imei || null;tag = tag || null;isActive = isActive || null;
 
         var quary ={};
@@ -31,8 +31,40 @@ module.exports.permanentStore = function() {
                 callback(devices);
             }
         });
+    };
 
+    this.getOneDevice = function(imei,tag){
+        imei = imei || null;tag = tag || null;
+    };
+
+    this.createDevice = function(){
+
+    };
+
+    this.updateDevice = function () {
+
+    };
+    this.removeDevice = function () {
+
+    };
+
+
+    /**
+     * functions related to history collection
+     */
+
+    this.newLocationDocument = function(imei,date,hour){
+
+    };
+    this.addLocation = function(imei,date,hour,locations){
+
+    };
+    this.getLocations = function(imei,date,hour){
+        hour = hour || null;
     }
+
+
+
 
 
 };

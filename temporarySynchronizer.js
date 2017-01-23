@@ -21,7 +21,7 @@ module.exports.temporarySynchronizer = function() {
     this.synchronize = function () {
 
 
-        permanentStorage.get(null,null,true,function(devices){
+        permanentStorage.getDevices(null,null,true,function(devices){
             for(var j =0; j<devices.length;j++){
 
                 var count = j;
