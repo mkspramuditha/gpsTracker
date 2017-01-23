@@ -5,16 +5,20 @@ module.exports.temporaryStore = function() {
 
     var redis = require('redis');
     var client = redis.createClient(6379,'127.0.0.1');
+    var client1 = redis.createClient(6380,'127.0.0.1');
+
+    var keyArray = [];
 
     this.store = function (data) {
         addToRedis(data,client);
+        addToRedis(data,client1);
         setLastData(data);
     };
 
     function setLastData(message) {
         var key = "l:"+message.imei;
         client.set(key, JSON.stringify(message));
-    };
+    }
 
     this.getLastData = function (imei,callback) {
         var key = "l:"+imei;
@@ -23,6 +27,36 @@ module.exports.temporaryStore = function() {
                 callback(false);
             }else {
                 callback(JSON.parse(value));
+            }
+        });
+    };
+
+    this.getFromImei = function (imei,callback) {
+        var data = [];
+        var dataArray = []
+        scan(imei,data,function (data) {
+            var keyArray=[];
+            if(data.length ==0){
+                console.log('no-data');
+                process.exit()
+            }
+            for(var i=0;i<data.length;i++)
+            {
+                keyArray.push(data[i]);
+                console.log(i);
+                var temp = data[i];
+                var tempValue = null;
+                client.get(temp, function(err, reply) {
+                    tempValue = {"key":temp, "location":JSON.parse(reply)};
+                    dataArray.push(tempValue);
+                    count+=1;
+                    if (count == data.length){
+                        console.log('sdsd');
+                        callback(dataArray);
+                        // PostCode(send);
+                        console.log(send.length);
+                    }
+                });
             }
         });
     };
@@ -60,6 +94,36 @@ module.exports.temporaryStore = function() {
             }
         });
 
+    };
+
+
+    function scan (value,data,callback) {
+        console.log('sds');
+        client.scan(
+            cursor,
+            'MATCH', value+'*',
+            'COUNT', '10',
+            function (err, res) {
+                if (err) throw err;
+
+                // Update the cursor position for the next scan
+                cursor = res[0];
+                // get the SCAN result for this iteration
+                var keys = res[1];
+
+
+                if (keys.length > 0) {
+                    data = data.concat(keys);
+                }
+
+                if (cursor === '0') {
+                    callback(data);
+                    return null;
+                }
+
+                return scan();
+            }
+        );
     }
 
 
