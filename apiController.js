@@ -16,7 +16,7 @@ app.post('/device/add', function (request, response) {
     var device = new Device({
         imei: imei,
         tag: tag,
-        isActive : true
+        active : true
     });
 
     device.save(function(err) {

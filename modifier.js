@@ -8,7 +8,7 @@ module.exports.modifier = function() {
     var store = require('./temporaryStore.js');
     store = new store.temporaryStore();
 
-    this.modify = function (message,callback) {
+        this.modify = function (message,callback) {
         var type = message.type;
         var lastDataObj ;
         store.getLastData(message.imei,function (obj) {
