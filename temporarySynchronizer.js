@@ -3,29 +3,32 @@
  */
 module.exports.temporarySynchronizer = function() {
 
-    var mongoose = require('mongoose');
-    var dbClient = mongoose.connect('mongodb://localhost/database');
+    //var mongoose = require('mongoose');
+    //var dbClient = mongoose.connect('mongodb://localhost/database');
 
     var redis = require('redis');
     var client = redis.createClient(6380,'127.0.0.1');
 
+
     var Device = require('./models/deviceModel');
     var History = require('./models/dataHistoryModel');
+
+    var permanentStorage = require('./permanentStore.js');
+    permanentStorage = new permanentStorage.permanentStore();
 
     var data = [];
     var cursor = '0';
     this.synchronize = function () {
 
-        Device.find({isActive: true}, function(err, device) {
 
-            if (err) throw err;
-            for(var j =0; j<device.length;j++){
+        permanentStorage.get(null,null,true,function(devices){
+            for(var j =0; j<devices.length;j++){
 
                 var count = j;
-                getAllValues(device[j].imei,function (data) {
+                getAllValues(devices[j].imei,function (data) {
                     var dataArray = data;
                     dataArray.sort(compare);
-                    addToPermanentStore(device[count],dataArray);
+                    addToPermanentStore(devices[count],dataArray);
                 })
             }
         });
