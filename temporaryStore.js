@@ -5,20 +5,32 @@ module.exports.temporaryStore = function() {
 
     var redis = require('redis');
     var client = redis.createClient(6379,'127.0.0.1');
+    var cursor = '0';
+
+    var keyArray = [];
 
     this.store = function (data) {
-        addToRedis(data,client);
+        addToRedis(data);
+        setLastData(data);
     };
 
-    this.getLastLocation = function(imei,callback){
+    function setLastData(message) {
+        var key = "l:"+message.imei;
+        client.set(key, JSON.stringify(message));
+    }
 
-        var key = 'l:'+imei+':'+'12';
-        client.get(key, function(err, reply) {
-            console.log(reply);
-            callback(JSON.parse(reply));
+    this.getLastData = function (imei,callback) {
+        var key = "l:"+imei;
+        client.get(key,function (err, value) {
+            if(value == null){
+                callback(false);
+            }else {
+                callback(JSON.parse(value));
+            }
         });
-
     };
+
+
 
     this.getTodayLocationHistory = function(imei,callback){
 
@@ -28,19 +40,7 @@ module.exports.temporaryStore = function() {
 
     };
 
-    this.getLastStatus = function (imei,callback) {
-
-    };
-
-    this.getTodayStatusHistory = function (imei,callback) {
-
-    };
-
-    this.getStatusHistory = function (imei,callback) {
-
-    };
-
-    function addToRedis(data, client) {
+    function addToRedis(data) {
 
         //TODO date time should be get from message not from the server receive time
         var timeNow = new Date();
@@ -51,9 +51,10 @@ module.exports.temporaryStore = function() {
         var minute = timeNow.getMinutes();
         var second = timeNow.getSeconds();
         var dateTime = year+month+date+hour+minute+second
-        var key = data.imei+":"+data.type+":"+dateTime;
+        var key = data.imei+":"+dateTime;
         client.set(key, JSON.stringify(data));
     }
+
 
     this.findFromTimeRange = function (startDate, endDate , type) {
         client.keys('*', function (err, keys) {
@@ -63,7 +64,10 @@ module.exports.temporaryStore = function() {
             }
         });
 
-    }
+    };
+
+
+
 
 
 

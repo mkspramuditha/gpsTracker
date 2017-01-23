@@ -9,7 +9,13 @@ var Schema = mongoose.Schema;
 var deviceSchema = new Schema({
     imei: { type: String, unique: true },
     tag: String,
-    isActive: Boolean
+    isActive: Boolean,
+    registeredDate: Date,
+    lastEditDate : Date,
+    deactivatedDate: Date ,
+    reactivatedDate: Date,
+    lastLocation : Object
+
 });
 
 // the schema is useless so far

@@ -196,8 +196,10 @@ module.exports.formatter = function(){
 
     function getCourseStatus(course) {
         var courseStatus = {};
-        var bitStream = parseInt(course[0],16).toString(2)+parseInt(course[1],16).toString();
+        var bitStream = padDigits(parseInt(course[0],16).toString(2),8)+padDigits(parseInt(course[1],16).toString(2),8);
+        console.log(bitStream);
         var course = parseInt(bitStream.slice(6,16),2);
+        console.log(course);
         if(bitStream[2]=='0'){
             courseStatus.gps = 'REAL_TIME';
         }
@@ -228,11 +230,12 @@ module.exports.formatter = function(){
         courseStatus.course = course;
 
         return courseStatus;
-
-
-
-
     }
+
+    function padDigits(number, digits) {
+        return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
+    }
+
 
 
 

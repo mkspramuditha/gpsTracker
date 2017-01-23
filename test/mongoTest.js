@@ -25,7 +25,7 @@ var Device = require('./../models/deviceModel');
     // console.log(users);
 // });
 
-Device.findOne({ imei: "sds"  }, function(err, device) {
+Device.find({ isActive:true }, function(err, device) {
     if (err) throw err;
 
     console.log(device);
