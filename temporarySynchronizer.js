@@ -17,7 +17,7 @@ module.exports.temporarySynchronizer = function() {
                 getAllValues(data[i].imei,function (data) {
                     var dataArray = data;
                     dataArray.sort(compare);
-                    addToPermanentStore(dataArray);
+                    addToPermanentStore(data[i],dataArray);
 
                 })
             }
@@ -25,9 +25,12 @@ module.exports.temporarySynchronizer = function() {
 
     };
 
-    function addToPermanentStore(data) {
-
-
+    function addToPermanentStore(DeviceModel,data) {
+        var lastLocation = data[-1];
+        DeviceModel.lastLocation = lastLocation;
+        DeviceModel.save(function (err) {
+            if (err) throw (err);
+        });
     }
 
     function getAllValues(imei,callback) {
