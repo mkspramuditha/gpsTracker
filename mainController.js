@@ -4,8 +4,10 @@ module.exports.controller = function() {
 
     var wss = require('./wsServer');
     var tempStore = require('./temporaryStore.js');
+    var tempBuffer = require('./temporaryBuffer');
     var httpClient = require('./httpClient.js');
     tempStore = new tempStore.temporaryStore();
+    tempBuffer = new tempBuffer.temporaryBuffer();
 
     wss = new wss.wsServer();
     httpClient = new httpClient.httpClient();
@@ -14,6 +16,7 @@ module.exports.controller = function() {
         temporaryStore(message);
         sendWs(message);
         sendHTTP(message);
+        tempBuffer.storeToBuffer(message);
     };
 
 

@@ -7,6 +7,11 @@ module.exports.temporaryBuffer = function() {
     var client = redis.createClient(6380,'127.0.0.1');
     var keyArray = [];
 
+    this.storeToBuffer = function (message) {
+      addToRedis(message);
+
+    };
+
 
     this.getFromImei = function (imei,callback) {
         var data = [];
