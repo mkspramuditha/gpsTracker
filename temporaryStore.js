@@ -5,7 +5,8 @@ module.exports.temporaryStore = function() {
 
     var redis = require('redis');
     var client = redis.createClient(6379,'127.0.0.1');
-    var client1 = redis.createClient(6380,'127.0.0.1');
+    // var client1 = redis.createClient(6380,'127.0.0.1');
+    var cursor = '0';
 
     var keyArray = [];
 
@@ -33,9 +34,10 @@ module.exports.temporaryStore = function() {
 
     this.getFromImei = function (imei,client,callback) {
         var data = [];
-        var dataArray = []
+        var dataArray = [];
         scan(imei,data,function (data) {
             var keyArray=[];
+            console.log(data);
             if(data.length ==0){
                 console.log('no-data');
                 process.exit()
@@ -43,10 +45,11 @@ module.exports.temporaryStore = function() {
             for(var i=0;i<data.length;i++)
             {
                 keyArray.push(data[i]);
-                console.log(i);
+                // console.log(i);
                 var temp = data[i];
                 var tempValue = null;
                 client.get(temp, function(err, reply) {
+                    console.log(reply);
                     tempValue = {"key":temp, "location":JSON.parse(reply)};
                     dataArray.push(tempValue);
                     count+=1;
@@ -62,11 +65,10 @@ module.exports.temporaryStore = function() {
     };
 
     this.removeKeys = function (keys,client,callback) {
-        client.del(keyArray,function (test) {
+        client.del(keys,function (test) {
             callback(true);
         });
     };
-
 
     this.getTodayLocationHistory = function(imei,callback){
 
