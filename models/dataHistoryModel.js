@@ -11,15 +11,7 @@ var dataHistory = new Schema({
     date:Date,
     hour:Number,
     dateTime : String,
-    location : [
-        {
-            latitude : null,
-            longitude : null,
-            dateTime : null,
-            speed : null,
-            direction : null
-        }
-    ]
+    location : Array
 });
 
 // the schema is useless so far

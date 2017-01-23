@@ -63,7 +63,7 @@ module.exports.temporaryBuffer = function() {
         var minute = timeNow.getMinutes();
         var second = timeNow.getSeconds();
         var dateTime = year+month+date+hour+minute+second
-        var key = data.imei+":"+data.type+":"+dateTime;
+        var key = data.imei+":"+dateTime;
         client.set(key, JSON.stringify(data));
     }
 

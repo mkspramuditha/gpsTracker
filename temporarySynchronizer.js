@@ -3,22 +3,29 @@
  */
 module.exports.temporarySynchronizer = function() {
 
+    var mongoose = require('mongoose');
+    var dbClient = mongoose.connect('mongodb://localhost/database');
+
     var redis = require('redis');
     var client = redis.createClient(6380,'127.0.0.1');
+
     var Device = require('./models/deviceModel');
-    var History = require('/models/dataHistoryModel');
+    var History = require('./models/dataHistoryModel');
 
     var data = [];
-
+    var cursor = '0';
     this.synchronize = function () {
-        Device.find({active: true}, function(err, data) {
+
+        Device.find({isActive: true}, function(err, device) {
+
             if (err) throw err;
-            for(var j =0; j<data.length;j++){
-                getAllValues(data[i].imei,function (data) {
+            for(var j =0; j<device.length;j++){
+
+                var count = j;
+                getAllValues(device[j].imei,function (data) {
                     var dataArray = data;
                     dataArray.sort(compare);
-                    addToPermanentStore(data[i],dataArray);
-
+                    addToPermanentStore(device[count],dataArray);
                 })
             }
         });
@@ -26,8 +33,14 @@ module.exports.temporarySynchronizer = function() {
     };
 
     function addToPermanentStore(DeviceModel,data) {
-        var lastLocation = data[-1];
+
+        var lastLocation = data[data.length-1].location;
+        console.log(lastLocation);
+
         DeviceModel.lastLocation = lastLocation;
+
+        console.log(DeviceModel);
+
         DeviceModel.save(function (err) {
             if (err) throw (err);
         });
@@ -36,6 +49,7 @@ module.exports.temporarySynchronizer = function() {
     function getAllValues(imei,callback) {
         var data = [];
         var dataArray = [];
+        var count = 0;
         scan(imei,data,function (data) {
             var keyArray=[];
             console.log(data);
@@ -55,10 +69,7 @@ module.exports.temporarySynchronizer = function() {
                     dataArray.push(tempValue);
                     count+=1;
                     if (count == data.length){
-                        console.log('sdsd');
                         callback(dataArray);
-                        // PostCode(send);
-                        console.log(send.length);
                     }
                 });
             }

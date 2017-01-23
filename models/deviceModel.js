@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 var deviceSchema = new Schema({
     imei: { type: String, unique: true },
     tag: String,
-    active: Boolean,
+    isActive: Boolean,
     registeredDate: Date,
     lastEditDate : Date,
     deactivatedDate: Date ,
