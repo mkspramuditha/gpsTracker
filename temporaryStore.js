@@ -31,7 +31,7 @@ module.exports.temporaryStore = function() {
         });
     };
 
-    this.getFromImei = function (imei,callback) {
+    this.getFromImei = function (imei,client,callback) {
         var data = [];
         var dataArray = []
         scan(imei,data,function (data) {
@@ -58,6 +58,12 @@ module.exports.temporaryStore = function() {
                     }
                 });
             }
+        });
+    };
+
+    this.removeKeys = function (keys,client,callback) {
+        client.del(keyArray,function (test) {
+            callback(true);
         });
     };
 
