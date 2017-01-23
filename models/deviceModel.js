@@ -14,17 +14,7 @@ var deviceSchema = new Schema({
     lastEditDate : Date,
     deactivatedDate: Date ,
     reactivatedDate: Date,
-    lastLocation : {
-        latitude:null,
-        longitude: null,
-        dateTime:null,
-        speed : null,
-        direction: null
-    },
-    status : {
-        dateTime: null
-    }
-
+    lastLocation : Object
 
 });
 
