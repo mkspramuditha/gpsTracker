@@ -18,8 +18,8 @@ module.exports.controller = function() {
         sendWs(message);
         sendHTTP(message);
         tempBuffer.storeToBuffer(message);
-    };
 
+    };
 
     function temporaryStore(message) {
         tempStore.store(message);

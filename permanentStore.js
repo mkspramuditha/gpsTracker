@@ -102,6 +102,7 @@ module.exports.permanentStore = function() {
 
     this.addLocations = function(device,locations){
         //sort locations according to date time
+
         locations.sort(compare);
         //update last location in device document
         var lastLocation = locations[locations.length-1];
@@ -112,19 +113,29 @@ module.exports.permanentStore = function() {
 
         //group sorted locations according to history document key
         var locationGroups = groupByKey(locations);
+        console.log('=======');
+        console.log(locationGroups);
+        console.log('=======');
+
+
         for(var key in locationGroups) {
 
              var localKey = key;
              getOneLocationDocument(localKey,function(locationDocument){
-
                  //add data to the location array
                  locationGroups[localKey].forEach(function(value){
                     locationDocument.location.push(value);
                  });
                  //TODO need to check whether this is blocking or not
+                 console.log('=======');
+
+                 console.log(locationDocument);
+                 console.log('=======');
+
                  locationDocument.save(function(err){
                      if(err){
-                         console.log('error in save locations');
+                         //TODO add error data to a separate log file
+                         console.log(err);
                      }
                  });
              })
@@ -183,13 +194,24 @@ module.exports.permanentStore = function() {
         var split = key.split(':');
         var imei = split[0];
         var date = new Date(split[1].substring(0,4)+'-'+split[1].substring(4,6)+'-'+split[1].substring(6,8));
+
+        console.log('mandmlas');
+        console.log(split[1]);
+        console.log(split[1].substring(0,4)+'-'+split[1].substring(4,6)+'-'+split[1].substring(6,8));
+
         var hour = split[1].substring(8);
         var location = [];
         return new History({_id:key,imei:imei,date:date,hour:hour,location:location});
     }
 
     function getKey(imei,date,hour){
-        return imei+':'+date.getYear()+(date.getMonth()+1)+date.getDate()+hour;
+        hour = (hour < 10)?'0'+hour:''+hour;
+        var month = date.getMonth()+1;
+        month = (month < 10)?'0'+month:''+month;
+        var day = date.getDate();
+        day = (day < 10)?'0'+day:''+day;
+        return imei+':'+date.getYear()+month+day+hour;
+
     }
 
 
@@ -207,15 +229,8 @@ module.exports.permanentStore = function() {
         var groups = {};
         locations.forEach(function(location,index){
 
-            //get date time string in (yyyymmddhh) format
-           var date = location.date;
-                var year = date.getYear();
-                var month = date.getMonth()+1;
-                var date = date.getDate();
-            var hour = location.hour;
-            var datehour = year+month+date+hour;
-            //create the key imei:yyyymmddhh
-            var key = data.imei+":"+datehour;
+            var dateTime = new Date(location.dateTime);
+            var key = getKey(location.imei,dateTime,dateTime.getHours());
             //add location object to relevant array
             if(groups.hasOwnProperty(key)){
                 groups[key].push(location);
@@ -238,9 +253,5 @@ module.exports.permanentStore = function() {
             return 1;
         return 0;
     }
-
-
-
-
 
 };

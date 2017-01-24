@@ -7,15 +7,17 @@ module.exports.temporaryBuffer = function() {
     var client = redis.createClient(6380,'127.0.0.1');
     var keyArray = [];
 
+    var cursor = '0';
+
     this.storeToBuffer = function (message) {
       addToRedis(message);
 
     };
 
-
     this.getFromImei = function (imei,callback) {
         var data = [];
         var dataArray = [];
+        var count = 0;
         scan(imei,data,function (data) {
             var keyArray=[];
             console.log(data);
@@ -28,17 +30,15 @@ module.exports.temporaryBuffer = function() {
                 keyArray.push(data[i]);
                 // console.log(i);
                 var temp = data[i];
-                var tempValue = null;
+                //var tempValue = null;
                 client.get(temp, function(err, reply) {
                     console.log(reply);
-                    tempValue = {"key":temp, "location":JSON.parse(reply)};
-                    dataArray.push(tempValue);
+                    //tempValue = {"key":temp, "location":JSON.parse(reply)};
+                    dataArray.push(JSON.parse(reply));
                     count+=1;
                     if (count == data.length){
-                        console.log('sdsd');
                         callback(dataArray);
-                        // PostCode(send);
-                        console.log(send.length);
+                        //TODO remove returned data
                     }
                 });
             }
@@ -51,21 +51,27 @@ module.exports.temporaryBuffer = function() {
         });
     };
 
-
     function addToRedis(data) {
-
-        //TODO date time should be get from message not from the server receive time
         var timeNow = new Date();
-        var year = timeNow.getYear().toString();
-        var month = (timeNow.getMonth()+1).toString();
-        var date = timeNow.getDate().toString();
-        var hour = timeNow.getHours().toString();
-        var minute = timeNow.getMinutes().toString();
-        var second = timeNow.getSeconds().toString();
-
-        var dateTime = year+month+date+hour+minute+second;
-        var key = data.imei+":"+dateTime;
+        var key = getRedisKey(data.imei,timeNow);
         client.set(key, JSON.stringify(data));
+    }
+
+    function getRedisKey(imei,date){
+
+        var year = date.getFullYear();
+        var month = (date.getMonth()+1);
+        month = (month<10)?'0'+month:''+month;
+        var day = date.getDate();
+        day = (day<10)?'0'+day:''+day;
+        var hour = date.getHours();
+        hour = (hour<10)?'0'+hour:''+hour;
+        var minute = date.getMinutes();
+        minute = (minute<10)?'0'+minute:''+minute;
+        var second = date.getSeconds();
+        second = (second<10)?'0'+second:''+second;
+        return imei+':'+year+month+day+hour+minute+second;
+
     }
 
     function scan (value,data,callback) {
@@ -76,22 +82,17 @@ module.exports.temporaryBuffer = function() {
             'COUNT', '10',
             function (err, res) {
                 if (err) throw err;
-
                 // Update the cursor position for the next scan
                 cursor = res[0];
                 // get the SCAN result for this iteration
                 var keys = res[1];
-
-
                 if (keys.length > 0) {
                     data = data.concat(keys);
                 }
-
                 if (cursor === '0') {
                     callback(data);
                     return null;
                 }
-
                 return scan();
             }
         );
