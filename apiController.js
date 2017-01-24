@@ -4,9 +4,8 @@
 var mongoose = require('mongoose');
 var express = require('express');
 
-var Device = require('./models/deviceModel');
-
-var dbClient = mongoose.connect('mongodb://localhost/database');
+var permanantStore = require('./permanentStore');
+permanantStore = permanantStore.permanentStore();
 var app = express();
 
 //resource server APIs
@@ -15,17 +14,16 @@ app.post('/device/add', function (request, response) {
     var imei = request.query.imei;
     var tag = request.query.tag;
 
-    var device = new Device({
-        imei: imei,
-        tag: tag,
-        active : true
+    permanantStore.createDevice(imei,tag,function (cb) {
+        if(cb){
+            response.send('device added successfully - IMEI :'+imei);
+        }
+        else{
+            response.send('error adding device');
+        }
     });
 
-    device.save(function(err) {
-        if (err) throw err;
-
-        response.send('New device added IMEI: '+imei+", TAG : "+ tag);
-    });
+    
 });
 
 app.post('/device/edit',function (request,response) {
@@ -33,48 +31,84 @@ app.post('/device/edit',function (request,response) {
     var imei = request.query.imei;
     var tag = request.query.tag;
 
-    Device.findOne({ imei: imei  }, function(err, device) {
-        if (err) throw err;
-
-        device.tag = tag;
-
-        device.save(function(err) {
-            if (err) throw err;
-            response.send('Device update IMEI: '+imei+', TAG : '+ tag);
-        });
+    permanantStore.updateDevice(imei,tag,null,function (cb) {
+       if(cb){
+           response.send('Device updated successfully - IMEI :'+imei);
+       }
+       else{
+           response.send('error updating device');
+       }
     });
+
+    // Device.findOne({ imei: imei  }, function(err, device) {
+    //     if (err) throw err;
+    //
+    //     device.tag = tag;
+    //
+    //     device.save(function(err) {
+    //         if (err) throw err;
+    //         response.send('Device update IMEI: '+imei+', TAG : '+ tag);
+    //     });
+    // });
 });
 
 app.post('/device/get',function(request,response){
     //return device for given tag
+    var tag = request.query.tag;
+    permanantStore.getOneDevice(null,tag,function (device) {
+        if(device){
+            response.send(device)
+        }
+        else {
+            response.send('error getting device');
+        }
+
+    })
 });
 
 app.post('/device/get-all',function(){
     //return all devices for given app
 });
 
-app.post('/device/activate', function () {
-    
+app.post('/device/activate', function (request, response) {
+    var imei = response.query.imei;
+    permanantStore.updateDevice(imei, null,true,function (cb) {
+        if(cb){
+            response.send('Device activated successfully - IMEI :'+imei);
+        }
+        else{
+            response.send('Device activation failed');
+        }
+    })
 });
 app.post('device/deactivate',function(){
+    var imei = response.query.imei;
+    permanantStore.updateDevice(imei, null,false,function (cb) {
+        if(cb){
+            response.send('Device deactivated successfully - IMEI :'+imei);
+        }
+        else{
+            response.send('Device deactivation failed');
+        }
+    })
 
 });
 
-app.post('/device/remove', function (request,response) {
-
-    var imei = request.query.imei;
-    Device.findOne({ imei: imei},function (err,device) {
-        if (err) throw err;
-
-        device.isActive = false;
-
-        device.save(function (err) {
-            if(err) throw err;
-            response.send('Device removed successfully IMEI : '+imei);
-        })
-
-    });
-});
+// app.post('/device/remove', function (request,response) {
+//
+//     var imei = request.query.imei;
+//     Device.findOne({ imei: imei},function (err,device) {
+//         if (err) throw err;
+//
+//         device.isActive = false;
+//
+//         device.save(function (err) {
+//             if(err) throw err;
+//             response.send('Device removed successfully IMEI : '+imei);
+//         })
+//
+//     });
+// });
 
 ////////////////////////////////////////////
 /////////actions for location api///////////
