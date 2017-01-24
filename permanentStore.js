@@ -53,14 +53,39 @@ module.exports.permanentStore = function() {
      * functions related to history collection
      */
 
-    this.newLocationDocument = function(imei,date,hour){
+    this.addLocations = function(imei,locations){
+        var locationGroups = groupByHour(locations);
+        locationGroups.forEach(function(value,index){
+
+        });
+        //for each location group get the location document , if not create new document
+        //add locations to location array in location document
 
     };
-    this.addLocation = function(imei,date,hour,locations){
-
-    };
+    /*
+    if hour is not given results for full day will be returned
+     */
     this.getLocations = function(imei,date,hour){
         hour = hour || null;
+    };
+
+
+
+    function getOneLocationDocuent(key){
+        //if location document is not found create new one and return
+        //return only one document
+    }
+    function getLocationDocuments(keyPattern){
+        //return matched document array
+    }
+
+    function createNewLocationDocument(key){
+
+    }
+
+
+    function groupByHour(locations){
+
     }
 
 
