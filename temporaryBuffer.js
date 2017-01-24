@@ -56,13 +56,14 @@ module.exports.temporaryBuffer = function() {
 
         //TODO date time should be get from message not from the server receive time
         var timeNow = new Date();
-        var year = timeNow.getYear();
-        var month = timeNow.getMonth()+1;
-        var date = timeNow.getDate();
-        var hour = timeNow.getHours();
-        var minute = timeNow.getMinutes();
-        var second = timeNow.getSeconds();
-        var dateTime = year+month+date+hour+minute+second
+        var year = timeNow.getYear().toString();
+        var month = (timeNow.getMonth()+1).toString();
+        var date = timeNow.getDate().toString();
+        var hour = timeNow.getHours().toString();
+        var minute = timeNow.getMinutes().toString();
+        var second = timeNow.getSeconds().toString();
+
+        var dateTime = year+month+date+hour+minute+second;
         var key = data.imei+":"+dateTime;
         client.set(key, JSON.stringify(data));
     }
