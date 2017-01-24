@@ -33,7 +33,7 @@ module.exports.permanentStore = function() {
         });
     };
 
-    this.getOneDevice = function(imei,tag){
+    this.getOneDevice = function(imei,tag,callback){
         imei = imei || null;tag = tag || null;
         var quary ={};
         if(imei != null){
@@ -54,12 +54,20 @@ module.exports.permanentStore = function() {
 
     };
 
-    this.createDevice = function(imei,tag){
+    this.createDevice = function(imei,tag,callback){
         var today = new Date();
-        return new Device({imei:imei,tag:tag,isActive:true,registeredDate:today,lastEditDate:today});
+        var device = new Device({imei:imei,tag:tag,isActive:true,registeredDate:today,lastEditDate:today});
+        device.save(function (err) {
+            if(err){
+                callback(false);
+            }else {
+                callback(true);
+            }
+
+        })
     };
 
-    this.updateDevice = function (imei,tag,isActive) {
+    this.updateDevice = function (imei,tag,isActive,callback) {
         tag = tag || null; isActive = isActive || null;
         this.getOneDevice(imei,tag,function(device){
             if(device != null){
@@ -69,10 +77,20 @@ module.exports.permanentStore = function() {
                 if(isActive != null){
                     device.isActive = isActive;
                 }
-                device.save()
+
+                device.lastEditDate = new Date();
+                device.save(function (err) {
+                    if(err){
+                        callback(false);
+                    }
+                    else{
+                        callback(true);
+                    }
+                })
             }
         });
     };
+
     this.removeDevice = function () {
 
     };
