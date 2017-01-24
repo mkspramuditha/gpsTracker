@@ -24,12 +24,14 @@ module.exports.modifier = function() {
                 callback(false);
             }
             else if(type == '12'){
+                lastDataObj.imei = message.imei;
                 lastDataObj.connection = 1;
                 lastDataObj.gps = {"latitude":message.latitude,"longitude": message.longitude,"speed":message.speed, "course":message.course};
                 lastDataObj.dateTime = message.time;
                 callback(lastDataObj);
             }
             else if(type == '16'){
+                lastDataObj.imei = message.imei;
                 lastDataObj.connection = 1;
                 lastDataObj.location = {"latitude":message.latitude,"longitude": message.longitude,"speed":message.speed, "course":message.course};
                 lastDataObj.dateTime = message.time;
