@@ -9,6 +9,8 @@ var Device = require('./models/deviceModel');
 var dbClient = mongoose.connect('mongodb://localhost/database');
 var app = express();
 
+//resource server APIs
+
 app.post('/device/add', function (request, response) {
     var imei = request.query.imei;
     var tag = request.query.tag;
@@ -43,6 +45,21 @@ app.post('/device/edit',function (request,response) {
     });
 });
 
+app.post('/device/get',function(request,response){
+    //return device for given tag
+});
+
+app.post('/device/get-all',function(){
+    //return all devices for given app
+});
+
+app.post('/device/activate', function () {
+    
+});
+app.post('device/deactivate',function(){
+
+});
+
 app.post('/device/remove', function (request,response) {
 
     var imei = request.query.imei;
@@ -58,6 +75,21 @@ app.post('/device/remove', function (request,response) {
 
     });
 });
+
+////////////////////////////////////////////
+/////////actions for location api///////////
+app.post('/location/resent',function(request,response){
+    //this will get recent locations from temporary storage
+});
+app.post('/location/history',function(request,response){
+    //this will return locations from permanent storage for given date
+});
+
+
+
+
+
+
 
 
 
