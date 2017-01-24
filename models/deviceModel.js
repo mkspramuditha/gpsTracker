@@ -7,6 +7,7 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var deviceSchema = new Schema({
+    //TODO both tag and imei should be a unique property
     imei: { type: String, unique: true },
     tag: String,
     isActive: Boolean,

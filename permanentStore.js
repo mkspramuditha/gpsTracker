@@ -35,14 +35,43 @@ module.exports.permanentStore = function() {
 
     this.getOneDevice = function(imei,tag){
         imei = imei || null;tag = tag || null;
+        var quary ={};
+        if(imei != null){
+            quary.imei = imei;
+        }
+        if(tag != null){
+            quary.tag = tag;
+        }
+        Device.findOne(quary, function(err, device) {
+
+            if (err){
+                callback(null);
+                console.log('error occurred while reading one device ');
+            }else {
+                callback(device);
+            }
+        });
+
     };
 
-    this.createDevice = function(){
-
+    this.createDevice = function(imei,tag){
+        var today = new Date();
+        return new Device({imei:imei,tag:tag,isActive:true,registeredDate:today,lastEditDate:today});
     };
 
-    this.updateDevice = function () {
-
+    this.updateDevice = function (imei,tag,isActive) {
+        tag = tag || null; isActive = isActive || null;
+        this.getOneDevice(imei,tag,function(device){
+            if(device != null){
+                if(tag != null){
+                    device.tag = tag;
+                }
+                if(isActive != null){
+                    device.isActive = isActive;
+                }
+                device.save()
+            }
+        });
     };
     this.removeDevice = function () {
 
@@ -53,10 +82,15 @@ module.exports.permanentStore = function() {
      * functions related to history collection
      */
 
-    this.addLocations = function(imei,locations){
+    this.addLocations = function(device,locations){
         //sort locations according to date time
         locations.sort(compare);
         //update last location in device document
+        var lastLocation = locations[locations.length-1];
+        device.lastLocation = lastLocation;
+        device.save(function (err) {
+            if (err){ console.log('device save error');}
+        });
 
         //group sorted locations according to history document key
         var locationGroups = groupByKey(locations);
@@ -70,39 +104,76 @@ module.exports.permanentStore = function() {
                     locationDocument.location.push(value);
                  });
                  //TODO need to check whether this is blocking or not
-                 locationDocument.save();
-
+                 locationDocument.save(function(err){
+                     if(err){
+                         console.log('error in save locations');
+                     }
+                 });
              })
-
         }
-
         //for each location group get the location document , if not create new document
         //add locations to location array in location document
 
     };
+
     /*
-    this will return location array for given imei number for given time period
-    if hour is not given results for full day will be returned
+        this will return location array for given imei number for given time period
+        if hour is not given results for full day will be returned
      */
-    this.getLocations = function(imei,date,hour){
+    this.getLocations = function(imei,date,hour,callback){
         hour = hour || null;
-
-
+        var keyPattern = getKey(imei,date,hour);
+        getLocationDocuments(keyPattern,function(locations){
+            callback(locations);
+        });
     };
 
 
-
+    /**
+     * if location document is not found create new one and return
+     * @param key
+     * @param callback
+     */
     function getOneLocationDocument(key,callback){
-        //if location document is not found create new one and return
-        //return only one document
+        History.findOne({_id:key}, function(err, result) {
+            if (err) { /* handle err */ }
+
+            if (result) {
+                // we have a result
+                callback(result);
+            } else {
+                // we don't
+                callback(createNewLocationDocument(key));
+            }});
     }
-    function getLocationDocuments(keyPattern){
+
+
+    function getLocationDocuments(keyPattern,callback){
         //return matched document array from db
+        History.find({_id: '/^'+keyPattern+'/'}, function(err, locations) {
+            //Do your action here..
+            if(err){
+                callback(null);
+                console.log('error in read locations');
+            }else {
+                callback(locations);
+            }
+        });
     }
 
     function createNewLocationDocument(key){
-
+        var split = key.split(':');
+        var imei = split[0];
+        var date = new Date(split[1].substring(0,4)+'-'+split[1].substring(4,6)+'-'+split[1].substring(6,8));
+        var hour = split[1].substring(8);
+        var location = [];
+        return new History({_id:key,imei:imei,date:date,hour:hour,location:location});
     }
+
+    function getKey(imei,date,hour){
+        return imei+':'+date.getYear()+(date.getMonth()+1)+date.getDate()+hour;
+    }
+
 
 
     /**
@@ -115,14 +186,28 @@ module.exports.permanentStore = function() {
      */
     function groupByKey(locations){
 
+        var groups = {};
+        locations.forEach(function(location,index){
 
-        locations.forEach(function(value,index){
             //get date time string in (yyyymmddhh) format
+           var date = location.date;
+                var year = date.getYear();
+                var month = date.getMonth()+1;
+                var date = date.getDate();
+            var hour = location.hour;
+            var datehour = year+month+date+hour;
             //create the key imei:yyyymmddhh
+            var key = data.imei+":"+datehour;
             //add location object to relevant array
-
-
+            if(groups.hasOwnProperty(key)){
+                groups[key].push(location);
+            }else {
+                var temparray = [];
+                temparray.push(location);
+                groups[key]= temparray;
+            }
         });
+        return groups;
 
     }
 
