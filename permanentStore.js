@@ -113,9 +113,6 @@ module.exports.permanentStore = function() {
 
         //group sorted locations according to history document key
         var locationGroups = groupByKey(locations);
-        console.log('=======');
-        console.log(locationGroups);
-        console.log('=======');
 
 
         for(var key in locationGroups) {
@@ -127,10 +124,6 @@ module.exports.permanentStore = function() {
                     locationDocument.location.push(value);
                  });
                  //TODO need to check whether this is blocking or not
-                 console.log('=======');
-
-                 console.log(locationDocument);
-                 console.log('=======');
 
                  locationDocument.save(function(err){
                      if(err){
@@ -195,10 +188,6 @@ module.exports.permanentStore = function() {
         var imei = split[0];
         var date = new Date(split[1].substring(0,4)+'-'+split[1].substring(4,6)+'-'+split[1].substring(6,8));
 
-        console.log('mandmlas');
-        console.log(split[1]);
-        console.log(split[1].substring(0,4)+'-'+split[1].substring(4,6)+'-'+split[1].substring(6,8));
-
         var hour = split[1].substring(8);
         var location = [];
         return new History({_id:key,imei:imei,date:date,hour:hour,location:location});
@@ -210,7 +199,7 @@ module.exports.permanentStore = function() {
         month = (month < 10)?'0'+month:''+month;
         var day = date.getDate();
         day = (day < 10)?'0'+day:''+day;
-        return imei+':'+date.getYear()+month+day+hour;
+        return imei+':'+date.getFullYear()+month+day+hour;
 
     }
 
