@@ -78,7 +78,7 @@ app.post('/device/remove', function (request,response) {
 
 ////////////////////////////////////////////
 /////////actions for location api///////////
-app.post('/location/resent',function(request,response){
+app.post('/location/recent',function(request,response){
     //this will get recent locations from temporary storage
 });
 app.post('/location/history',function(request,response){
