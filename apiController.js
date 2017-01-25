@@ -5,7 +5,9 @@ var mongoose = require('mongoose');
 var express = require('express');
 
 var permanantStore = require('./permanentStore');
+var temporaryStore = require('./temporaryStore');
 permanantStore = permanantStore.permanentStore();
+temporaryStore = temporaryStore.temporaryStore();
 var app = express();
 
 //resource server APIs
@@ -114,6 +116,15 @@ app.post('device/deactivate',function(){
 /////////actions for location api///////////
 app.post('/location/recent',function(request,response){
     //this will get recent locations from temporary storage
+    var imei = request.query.imei;
+    temporaryStore.getFromImei(imei,function (data) {
+        if(data){
+            response.send(data);
+        }
+        else{
+            response.send('no data avaailable for the given IMEI : '+imei);
+        }
+    })
 });
 app.post('/location/history',function(request,response){
     //this will return locations from permanent storage for given date
