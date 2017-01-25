@@ -7,6 +7,7 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var dataHistory = new Schema({
+    _id: String,
     imei: String,
     date:Date,
     hour:Number,
