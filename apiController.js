@@ -117,6 +117,17 @@ app.post('/location/recent',function(request,response){
 });
 app.post('/location/history',function(request,response){
     //this will return locations from permanent storage for given date
+    var imei = request.query.imei;
+    var date = new Date(request.query.date);
+    var hour = parseInt(request.query.hour);
+    permanantStore.getLocations(imei,date,hour,function (locations) {
+        if(locations){
+            response.send(locations);
+        }
+        else{
+            response.send('error getting data - /location/history');
+        }
+    })
 });
 
 
