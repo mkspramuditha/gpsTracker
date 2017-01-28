@@ -129,17 +129,24 @@ app.post('/location/recent',function(req,res){
     })
 
 });
-app.post('/location/history',function(request,response){
+app.post('/location/history',function(req,res){
     //this will return locations from permanent storage for given date
-    var imei = request.query.imei;
-    var date = new Date(request.query.date);
-    var hour = parseInt(request.query.hour);
+    var body = req.body;
+
+    console.log(body);
+
+    var imei = body.imei;
+    var date = new Date(body.date);
+    var hour = null;
+    if(typeof body.hour !== "undefined"){
+        hour = parseInt(body.hour);
+    }
     permanentStore.getLocations(imei,date,hour,function (locations) {
         if(locations){
-            response.send(locations);
+            res.send(locations);
         }
         else{
-            response.send('error getting data - /location/history');
+            res.send('error getting data - /location/history');
         }
     })
 });
