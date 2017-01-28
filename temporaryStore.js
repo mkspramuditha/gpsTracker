@@ -104,7 +104,7 @@ module.exports.temporaryStore = function() {
         var data = [];
         var dataArray = [];
         var count = 0;
-        scan(imei,data,function (data) {
+        search(imei,data,function (data) {
             var keyArray=[];
             console.log(data);
             if(data.length ==0){
@@ -133,8 +133,7 @@ module.exports.temporaryStore = function() {
     };
 
 
-    function scan (value,data,callback) {
-        console.log('sds');
+    function search (value,data,callback) {
         client.scan(
             cursor,
             'MATCH', value+'*',
@@ -152,7 +151,7 @@ module.exports.temporaryStore = function() {
                     callback(data);
                     return null;
                 }
-                return scan();
+                return search(value,data,callback);
             }
         );
     }
