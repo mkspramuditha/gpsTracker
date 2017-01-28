@@ -40,6 +40,13 @@ module.exports.modifier = function() {
                 lastDataObj.status.gsm = message.gsm;
                 callback(lastDataObj);
             }
+            else if (type == '13'){
+                //just update the last location status fields
+                //don't send duplicate location
+
+                callback(false);
+
+            }
         });
 
     }

@@ -43,6 +43,7 @@ module.exports.formatter = function(){
             return {"imei": imeiNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed,"course":courseStatus};
         }
         else if(protocolNumber == "13"){
+
             //TODO this is required(need to respond for this)
             var info = getInformation(data[0]);
             var voltage = voltageLevel(data[1]);

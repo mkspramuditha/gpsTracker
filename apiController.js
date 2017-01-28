@@ -133,8 +133,6 @@ app.post('/location/history',function(req,res){
     //this will return locations from permanent storage for given date
     var body = req.body;
 
-    console.log(body);
-
     var imei = body.imei;
     var date = new Date(body.date);
     var hour = null;
