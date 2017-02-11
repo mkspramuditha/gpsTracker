@@ -35,7 +35,6 @@ net.createServer(function(sock) {
                 sock.write(formattedObj.response);
 
             }else if (formattedObj.type == "13"){
-                //TODO send response to the client
                 sock.write(formattedObj.response);
             }
 

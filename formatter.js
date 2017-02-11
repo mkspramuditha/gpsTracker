@@ -58,7 +58,7 @@ module.exports.formatter = function(){
             var responseMessage = "05"+protocolNumber+serialNumber;
             var response = startbit+responseMessage+crc16(responseMessage,'hex')+stopBit;
 
-            return {"imei":imeiNo, "type":protocolNumber, "info": info, "voltageLevel":voltage, "gsm":gsm,"response":response};
+            return {"imei":imeiNo, "type":protocolNumber, "info": info, "voltageLevel":voltage, "gsm":gsm,"response": response};
         }
         else if(protocolNumber == "15"){
 

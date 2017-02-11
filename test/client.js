@@ -8,37 +8,25 @@ var value1 = '78780d0103554880201067640004b1bb0d0a';
 client.connect(8888, '127.0.0.1', function() {
 
     console.log('Connected');
+    checkValue1213();
 
-    checkValue1216();
-
-    // client.write(new Buffer(value1, 'hex'),function () {
-    //     client.write(new Buffer(value12, 'hex'),function () {
-    //         client.write(new Buffer(value13,'hex'),function () {
-    //            client.write(new Buffer(value12,'hex'),function () {
-    //                client.destroy();
-    //
-    //            });
-    //         });
-    //     });
-    // });
 
 });
 
 
 function checkValue1213() {
 
-    client.write(new Buffer(value1, 'hex'),function (res1) {
+    client.write(new Buffer(value1, 'hex'),function () {
 
         console.log('response for type : 01');
-        console.log(res1);
+
 
         client.write(new Buffer(value12, 'hex'),function () {
 
             setTimeout(function() {
 
-                client.write(new Buffer(value13,'hex'),function (res13) {
+                client.write(new Buffer(value13,'hex'),function () {
                     console.log('response for type : 13');
-                    console.log(res13);
 
                     client.write(new Buffer(value12,'hex'),function () {
                         client.destroy();
@@ -80,7 +68,9 @@ function checkValue1216() {
 }
 
 client.on('data', function(data) {
-    console.log(data);
+
+    console.log(' >>>>>>>>>>>>>>>>>>>>>>>. data in : '+data);
+
 });
 
 client.on('close', function() {
