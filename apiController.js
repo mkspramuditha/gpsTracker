@@ -3,20 +3,20 @@
  */
 var mongoose = require('mongoose');
 var express = require('express');
-
-var permanantStore = require('./permanentStore');
-var temporaryStore = require('./temporaryStore');
-permanantStore = permanantStore.permanentStore();
-temporaryStore = temporaryStore.temporaryStore();
 var app = express();
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
-//resource server APIs
+var pStoreFile = require('./permanentStore.js');
+var tStoreFile = require('./temporaryStore');
+var permanentStore = new pStoreFile.permanentStore();
+var temporaryStore = new tStoreFile.temporaryStore();
 
 app.post('/device/add', function (request, response) {
     var imei = request.query.imei;
     var tag = request.query.tag;
 
-    permanantStore.createDevice(imei,tag,function (cb) {
+    permanentStore.createDevice(imei,tag,function (cb) {
         if(cb){
             response.send('device added successfully - IMEI :'+imei);
         }
@@ -25,7 +25,6 @@ app.post('/device/add', function (request, response) {
         }
     });
 
-    
 });
 
 app.post('/device/edit',function (request,response) {
@@ -33,7 +32,7 @@ app.post('/device/edit',function (request,response) {
     var imei = request.query.imei;
     var tag = request.query.tag;
 
-    permanantStore.updateDevice(imei,tag,null,function (cb) {
+    permanentStore.updateDevice(imei,tag,null,function (cb) {
        if(cb){
            response.send('Device updated successfully - IMEI :'+imei);
        }
@@ -57,7 +56,7 @@ app.post('/device/edit',function (request,response) {
 app.post('/device/get',function(request,response){
     //return device for given tag
     var tag = request.query.tag;
-    permanantStore.getOneDevice(null,tag,function (device) {
+    permanentStore.getOneDevice(null,tag,function (device) {
         if(device){
             response.send(device)
         }
@@ -74,7 +73,7 @@ app.post('/device/get-all',function(){
 
 app.post('/device/activate', function (request, response) {
     var imei = response.query.imei;
-    permanantStore.updateDevice(imei, null,true,function (cb) {
+    permanentStore.updateDevice(imei, null,true,function (cb) {
         if(cb){
             response.send('Device activated successfully - IMEI :'+imei);
         }
@@ -85,7 +84,7 @@ app.post('/device/activate', function (request, response) {
 });
 app.post('device/deactivate',function(){
     var imei = response.query.imei;
-    permanantStore.updateDevice(imei, null,false,function (cb) {
+    permanentStore.updateDevice(imei, null,false,function (cb) {
         if(cb){
             response.send('Device deactivated successfully - IMEI :'+imei);
         }
@@ -114,29 +113,37 @@ app.post('device/deactivate',function(){
 
 ////////////////////////////////////////////
 /////////actions for location api///////////
-app.post('/location/recent',function(request,response){
+
+app.post('/location/recent',function(req,res){
     //this will get recent locations from temporary storage
-    var imei = request.query.imei;
+    var body = req.body;
+    var imei = body.imei;
     temporaryStore.getFromImei(imei,function (data) {
         if(data){
-            response.send(data);
+            res.send(data);
         }
         else{
-            response.send('no data avaailable for the given IMEI : '+imei);
+            res.send('no data available for the given IMEI : '+imei);
         }
     })
+
 });
-app.post('/location/history',function(request,response){
+app.post('/location/history',function(req,res){
     //this will return locations from permanent storage for given date
-    var imei = request.query.imei;
-    var date = new Date(request.query.date);
-    var hour = parseInt(request.query.hour);
-    permanantStore.getLocations(imei,date,hour,function (locations) {
+    var body = req.body;
+
+    var imei = body.imei;
+    var date = new Date(body.date);
+    var hour = null;
+    if(typeof body.hour !== "undefined"){
+        hour = parseInt(body.hour);
+    }
+    permanentStore.getLocations(imei,date,hour,function (locations) {
         if(locations){
-            response.send(locations);
+            res.send(locations);
         }
         else{
-            response.send('error getting data - /location/history');
+            res.send('error getting data - /location/history');
         }
     })
 });

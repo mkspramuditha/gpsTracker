@@ -143,10 +143,19 @@ module.exports.permanentStore = function() {
         if hour is not given results for full day will be returned
      */
     this.getLocations = function(imei,date,hour,callback){
-        hour = hour || null;
-        var keyPattern = getKey(imei,date,hour);
+
+        var keyPattern = getKeyPattern(imei,date,hour);
         getLocationDocuments(keyPattern,function(locations){
-            callback(locations);
+            if(locations != null){
+                var locationsArray = [];
+                locations.forEach(function (locDoc) {
+                    Array.prototype.push.apply(locationsArray, locDoc.location);
+                });
+                //TODO need to order locations from date time
+                callback(locationsArray);
+            }else {
+                callback(null);
+            }
         });
     };
 
@@ -172,11 +181,15 @@ module.exports.permanentStore = function() {
 
     function getLocationDocuments(keyPattern,callback){
         //return matched document array from db
-        History.find({_id: '/^'+keyPattern+'/'}, function(err, locations) {
+
+        History.find({_id: { $regex: "^"+keyPattern} }, function(err, locations) {
             //Do your action here..
+            console.log(locations);
+
             if(err){
                 callback(null);
-                console.log('error in read locations');
+                console.log('error occurred');
+                console.log(err);
             }else {
                 callback(locations);
             }
@@ -193,13 +206,17 @@ module.exports.permanentStore = function() {
         return new History({_id:key,imei:imei,date:date,hour:hour,location:location});
     }
 
-    function getKey(imei,date,hour){
-        hour = (hour < 10)?'0'+hour:''+hour;
+    function getKeyPattern(imei,date,hour){
+
         var month = date.getMonth()+1;
         month = (month < 10)?'0'+month:''+month;
         var day = date.getDate();
         day = (day < 10)?'0'+day:''+day;
-        return imei+':'+date.getFullYear()+month+day+hour;
+        if(hour != null){
+            hour = (hour < 10)?'0'+hour:''+hour;
+            return imei+':'+date.getFullYear()+month+day+hour;
+        }
+        return imei+':'+date.getFullYear()+month+day;
 
     }
 
@@ -219,7 +236,7 @@ module.exports.permanentStore = function() {
         locations.forEach(function(location,index){
 
             var dateTime = new Date(location.dateTime);
-            var key = getKey(location.imei,dateTime,dateTime.getHours());
+            var key = getKeyPattern(location.imei,dateTime,dateTime.getHours());
             //add location object to relevant array
             if(groups.hasOwnProperty(key)){
                 groups[key].push(location);

@@ -8,6 +8,7 @@ module.exports.formatter = function(){
         var dataArray = message.toString('hex').match(/.{1,2}/g);
         if(dataArray.length <=10){
             // console.log("length");
+            //TODO add notification functionality( email ) if there is any error
             return false;
 
         }
@@ -28,9 +29,9 @@ module.exports.formatter = function(){
 
         }
 
-
         if(protocolNumber == "01"){
             var imei = data.join("");
+            //TODO add response ( serial number error check etc ..)
             return {"type":protocolNumber,"imei":imei};
         }
         else if(protocolNumber == "12"){
@@ -43,6 +44,7 @@ module.exports.formatter = function(){
             return {"imei": imeiNo , "type":protocolNumber, "time":time, "latitude":latitude , "longitude":longitude, "speed":speed,"course":courseStatus};
         }
         else if(protocolNumber == "13"){
+
             //TODO this is required(need to respond for this)
             var info = getInformation(data[0]);
             var voltage = voltageLevel(data[1]);
@@ -72,6 +74,10 @@ module.exports.formatter = function(){
         else if(protocolNumber =="80"){
 
         }
+
+        //not a valid protocol number
+        //TODO add notification functionality if there is any error
+        return false;
     };
 
 
