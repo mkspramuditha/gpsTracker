@@ -41,6 +41,7 @@ net.createServer(function(sock) {
                 if(isValid){
                     console.log("validate - msg -   "+formattedObj);
                     modifier.modify(formattedObj,function (modifiedObj) {
+                        //if message do not contain location information or not a necessary message type
                         if(modifiedObj == false){
 
                         }else{
