@@ -51,14 +51,14 @@ module.exports.modifier = function() {
                 lastDataObj.status.gsm = message.gsm;
 
                 //update local device status list
-                deviceStatus[message.imei] = {"info": message.info,"voltageLevel": message.voltage, "gsm": message.gsm};
+                deviceStatus[message.imei] = {"info": message.info,"voltageLevel": message.voltageLevel, "gsm": message.gsm};
                 callback(lastDataObj);
 
             }
             else if (type == '13'){
                 //just update the last location status fields
                 //don't send duplicate location
-                deviceStatus[message.imei] = {"info": message.info,"voltageLevel": message.voltage, "gsm": message.gsm};
+                deviceStatus[message.imei] = {"info": message.info,"voltageLevel": message.voltageLevel, "gsm": message.gsm};
                 callback(false);
 
 

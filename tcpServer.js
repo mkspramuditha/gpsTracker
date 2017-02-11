@@ -33,7 +33,7 @@ net.createServer(function(sock) {
             //reply if needed
             if(formattedObj.type == "01"){
                 sock.write(formattedObj.response);
-                //TODO send response to the client
+
             }else if (formattedObj.type == "13"){
                 //TODO send response to the client
                 sock.write(formattedObj.response);
@@ -43,6 +43,7 @@ net.createServer(function(sock) {
                 if(isValid){
                     console.log("validate - msg -   "+formattedObj);
                     modifier.modify(formattedObj,function (modifiedObj) {
+                        //if message do not contain location information or not a necessary message type
                         if(modifiedObj == false){
 
                         }else{
