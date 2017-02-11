@@ -12,62 +12,53 @@ var tStoreFile = require('./temporaryStore');
 var permanentStore = new pStoreFile.permanentStore();
 var temporaryStore = new tStoreFile.temporaryStore();
 
-app.post('/device/add', function (request, response) {
-    var imei = request.query.imei;
-    var tag = request.query.tag;
+app.post('/device/add', function (req, res) {
+    var imei = req.body.imei;
+    var tag = req.body.tag;
 
     permanentStore.createDevice(imei,tag,function (cb) {
         if(cb){
-            response.send('device added successfully - IMEI :'+imei);
+            res.json({"statusCode" : "S100", "statusDetail": "device added successfully - IMEI : "+imei});
         }
         else{
-            response.send('error adding device');
+            res.json({"statusCode": "E100", "statusDetail": "error while adding device - IMEI : "+imei});
         }
     });
 
 });
 
-app.post('/device/edit',function (request,response) {
+app.post('/device/edit',function (req,res) {
 
-    var imei = request.query.imei;
-    var tag = request.query.tag;
+    var imei = req.body.imei;
+    var tag = req.body.tag;
 
     permanentStore.updateDevice(imei,tag,null,function (cb) {
        if(cb){
-           response.send('Device updated successfully - IMEI :'+imei);
+           res.json({"statusCode" : "S110", "statusDetail": "device updated successfully - IMEI : "+imei});
        }
        else{
-           response.send('error updating device');
+           res.json({"statusCode": "E110", "statusDetail": "error while updating device - IMEI : "+imei});
        }
     });
 
-    // Device.findOne({ imei: imei  }, function(err, device) {
-    //     if (err) throw err;
-    //
-    //     device.tag = tag;
-    //
-    //     device.save(function(err) {
-    //         if (err) throw err;
-    //         response.send('Device update IMEI: '+imei+', TAG : '+ tag);
-    //     });
-    // });
 });
 
-app.post('/device/get',function(request,response){
+app.get('/device/get',function(req,res){
     //return device for given tag
-    var tag = request.query.tag;
+    var tag = req.query.tag;
     permanentStore.getOneDevice(null,tag,function (device) {
         if(device){
-            response.send(device)
+            res.json({"statusCode" : "S120", "statusDetail": "device get successfully - IMEI : "+imei,"device":device});
         }
         else {
-            response.send('error getting device');
+            res.json({"statusCode": "E120", "statusDetail": "error while getting device - IMEI : "+imei});
+
         }
 
     })
 });
 
-app.post('/device/get-all',function(){
+app.get('/device/get-all',function(){
     //return all devices for given app
 });
 
@@ -115,40 +106,38 @@ app.post('device/deactivate',function(){
 ////////////////////////////////////////////
 /////////actions for location api///////////
 
-app.post('/location/recent',function(req,res){
+app.get('/location/recent',function(req,res){
     //this will get recent locations from temporary storage
 
-    var body = req.body;
-    var imei = body.imei;
+    //TODO this should pass tag not imei
+    var imei = req.query.imei;
 
     temporaryStore.getFromImei(imei,function (data) {
         if(data){
-            res.send(data);
+            res.json({"statusCode" : "S300", "statusDetail": "location request success for - IMEI : "+imei,"data":data});
         }
         else{
-            res.send('no data available for the given IMEI : '+imei);
+            res.json({"statusCode" : "E300", "statusDetail": "error in recent location request for - IMEI : "+imei});
         }
     })
 
 });
 
 
-app.post('/location/history',function(req,res){
+app.get('/location/history',function(req,res){
     //this will return locations from permanent storage for given date
-    var body = req.body;
-
-    var imei = body.imei;
-    var date = new Date(body.date);
+    var imei = req.query.imei;
+    var date = new Date(req.query.date);
     var hour = null;
-    if(typeof body.hour !== "undefined"){
-        hour = parseInt(body.hour);
+    if(typeof req.query.hour !== "undefined"){
+        hour = parseInt(req.query.hour);
     }
     permanentStore.getLocations(imei,date,hour,function (locations) {
         if(locations){
-            res.send(locations);
+            res.json({"statusCode" : "S301", "statusDetail": "location request success for - IMEI : "+imei,"data":locations});
         }
         else{
-            res.send('error getting data - /location/history');
+            res.json({"statusCode" : "E300", "statusDetail": "error getting data for - IMEI : "+imei});
         }
     })
 });
