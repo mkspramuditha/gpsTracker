@@ -32,9 +32,8 @@ net.createServer(function(sock) {
 
             //reply if needed
             if(formattedObj.type == "01"){
-                sock.write(formattedObj.response)
-                //TODO send response to the client
-            }else if (formattedObj.type == "03"){
+                sock.write(formattedObj.response);
+            }else if (formattedObj.type == "13"){
                 //TODO send response to the client
             }
 
