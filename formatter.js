@@ -55,7 +55,10 @@ module.exports.formatter = function(){
             var voltage = voltageLevel(data[1]);
             var gsm = gsmStrength(data[2]);
 
-            return {"imei":imeiNo, "type":protocolNumber, "info": info, "voltageLevel":voltage, "gsm":gsm};
+            var responseMessage = "05"+protocolNumber+serialNumber;
+            var response = startbit+responseMessage+crc16(responseMessage,'hex')+stopBit;
+
+            return {"imei":imeiNo, "type":protocolNumber, "info": info, "voltageLevel":voltage, "gsm":gsm,"response":response};
         }
         else if(protocolNumber == "15"){
 
