@@ -23,6 +23,7 @@ module.exports.validator = function(){
                 callback(false);
             }else {
                 checkDatabase(data.imei,function(isExist,device){
+
                     if(isExist){
                         //TODO get value (number/tag) from db and
                         var number  = device.tag;
@@ -44,11 +45,14 @@ module.exports.validator = function(){
             //TODO add some notification functionality(email) if there is any error
             if (err){
                 callback(false,null);
+            }else {
+                if(device === null){
+                    callback(false,null)
+                }else {
+                    callback(true,device);
+                }
             }
-            if(device == null){
-                callback(false,null)
-            }
-            callback(true,device);
+
         });
 
     }
