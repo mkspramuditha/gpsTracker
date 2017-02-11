@@ -159,6 +159,7 @@ module.exports.formatter = function(){
 
     function voltageLevel(voltage) {
         var voltageMsg = parseInt(voltage, 16);
+
         if(voltageMsg == 0){
             return "NO_POWER";
         }
