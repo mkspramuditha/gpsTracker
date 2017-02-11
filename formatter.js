@@ -3,6 +3,9 @@
  */
 module.exports.formatter = function(){
 
+    var crc16 = require('crc-itu').crc16;
+
+
     this.format = function (message, imeiNo) {
         // console.log(message);
         var dataArray = message.toString('hex').match(/.{1,2}/g);
@@ -31,8 +34,10 @@ module.exports.formatter = function(){
 
         if(protocolNumber == "01"){
             var imei = data.join("");
+            var responseMessage = "05"+protocolNumber+serialNumber;
+            var response = startbit+responseMessage+crc16(responseMessage,'hex')+stopBit;
             //TODO add response ( serial number error check etc ..)
-            return {"type":protocolNumber,"imei":imei};
+            return {"type":protocolNumber,"imei":imei,"response":response};
         }
         else if(protocolNumber == "12"){
             var time = getTime(data.slice(0,6));
