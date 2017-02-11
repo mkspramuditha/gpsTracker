@@ -15,8 +15,8 @@ module.exports.controller = function() {
     this.send = function(message){
 
         temporaryStore(message);
-        // sendWs(message);
-        // sendHTTP(message);
+        sendWs(message);
+        sendHTTP(message);
         tempBuffer.storeToBuffer(message);
 
     };
