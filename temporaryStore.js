@@ -4,7 +4,7 @@
 module.exports.temporaryStore = function() {
 
     var redis = require('redis');
-    var client = redis.createClient(6379,'127.0.0.1');
+    var client = redis.createClient(6391,'127.0.0.1');
     var cursor = '0';
 
     var keyArray = [];

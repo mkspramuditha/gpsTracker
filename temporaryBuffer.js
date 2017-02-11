@@ -4,7 +4,7 @@
 
 module.exports.temporaryBuffer = function() {
     var redis = require('redis');
-    var client = redis.createClient(6380,'127.0.0.1');
+    var client = redis.createClient(6390,'127.0.0.1');
     var keyArray = [];
 
     var cursor = '0';
