@@ -82,6 +82,7 @@ app.post('/device/activate', function (request, response) {
         }
     })
 });
+
 app.post('device/deactivate',function(){
     var imei = response.query.imei;
     permanentStore.updateDevice(imei, null,false,function (cb) {
@@ -116,8 +117,10 @@ app.post('device/deactivate',function(){
 
 app.post('/location/recent',function(req,res){
     //this will get recent locations from temporary storage
+
     var body = req.body;
     var imei = body.imei;
+
     temporaryStore.getFromImei(imei,function (data) {
         if(data){
             res.send(data);
@@ -128,6 +131,8 @@ app.post('/location/recent',function(req,res){
     })
 
 });
+
+
 app.post('/location/history',function(req,res){
     //this will return locations from permanent storage for given date
     var body = req.body;

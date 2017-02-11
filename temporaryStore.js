@@ -5,6 +5,7 @@ module.exports.temporaryStore = function() {
 
     var redis = require('redis');
     var client = redis.createClient(6391,'127.0.0.1');
+    // var client = redis.createClient(6380,'127.0.0.1');
     var cursor = '0';
 
     var keyArray = [];
@@ -110,7 +111,6 @@ module.exports.temporaryStore = function() {
             if(data.length ==0){
                 console.log('no-data');
                 callback(null);
-                process.exit()
             }
             for(var i=0;i<data.length;i++)
             {
