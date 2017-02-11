@@ -5,7 +5,7 @@
 module.exports.wsServer = function() {
 
     var jwt = require('jsonwebtoken');
-    var token = jwt.sign({name: 'shan'}, 'secret-key');
+    // var token = jwt.sign({name: 'shan'}, 'secret-key');
 
     var WebSocketServer = require('ws').Server;
     var wss = new WebSocketServer({

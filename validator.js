@@ -22,9 +22,10 @@ module.exports.validator = function(){
             if( data.imei in unknownDeviceList){
                 callback(false);
             }else {
-                checkDatabase(data.imei,function(isExist){
+                checkDatabase(data.imei,function(isExist,device){
                     if(isExist){
-                        var number  = 1234;
+                        //TODO get value (number/tag) from db and
+                        var number  = device.tag;
                         deviceList[data.imei] = number;
                         data.number = number;
                         callback(true);
@@ -39,16 +40,16 @@ module.exports.validator = function(){
     function checkDatabase(imei,callback) {
 
         Device.findOne({ imei: imei  }, function(err, device) {
-            if (err) throw err;
 
-            if(device == null){
-                callback(false)
+            //TODO add some notification functionality(email) if there is any error
+            if (err){
+                callback(false,null);
             }
-            callback(true);
+            if(device == null){
+                callback(false,null)
+            }
+            callback(true,device);
         });
-
-        //TODO implement db check functionality
-        //this is a asynchronous function so only possible way is callback
 
     }
 

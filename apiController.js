@@ -25,7 +25,6 @@ app.post('/device/add', function (request, response) {
         }
     });
 
-    
 });
 
 app.post('/device/edit',function (request,response) {

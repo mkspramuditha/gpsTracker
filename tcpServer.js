@@ -10,7 +10,7 @@ controller = new controller.controller();
 modifier = new modifier.modifier();
 
 var HOST = '127.0.0.1';
-var PORT = 4444;
+var PORT = 8888;
 
 var clients = {};
 
@@ -23,28 +23,38 @@ net.createServer(function(sock) {
         var addr = sock.remoteAddress+':'+sock.remotePort;
 
         var formattedObj = formatter.format(data, clients[addr]);
-        if(formattedObj.type == "01"){
-            clients[addr] = formattedObj.imei;
-        }
 
-        validator.validate(formattedObj,function(isValid){
-            if(isValid){
-                console.log("validate - msg -   "+formattedObj);
-                modifier.modify(formattedObj,function (modifiedObj) {
-                    if(modifiedObj == false){
-
-                    }else{
-                        controller.send(modifiedObj);
-                    }
-                });
-
-            }else {
-                console.log('validation failed for imei : '+formattedObj.imei)
+        if(formattedObj !== false){
+            //update clients map
+            if(formattedObj.type == "01"){
+                clients[addr] = formattedObj.imei;
             }
 
+            //reply if needed
+            if(formattedObj.type == "01"){
+                //TODO send response to the client
+            }else if (formattedObj.type == "03"){
+                //TODO send response to the client
+            }
 
+            validator.validate(formattedObj,function(isValid){
+                if(isValid){
+                    console.log("validate - msg -   "+formattedObj);
+                    modifier.modify(formattedObj,function (modifiedObj) {
+                        if(modifiedObj == false){
 
-        });
+                        }else{
+                            controller.send(modifiedObj);
+                        }
+                    });
+
+                }else {
+                    console.log('validation failed for imei : '+formattedObj.imei)
+                }
+            });
+
+        }
+
     });
 
     sock.on('close', function(data) {
