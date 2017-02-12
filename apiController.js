@@ -134,10 +134,10 @@ app.get('/location/history',function(req,res){
     }
     permanentStore.getLocations(imei,date,hour,function (locations) {
         if(locations){
-            res.json({"statusCode" : "S301", "statusDetail": "location request success for - IMEI : "+imei,"data":locations});
+            res.json({"statusCode" : "S310", "statusDetail": "location request success for - IMEI : "+imei,"data":locations});
         }
         else{
-            res.json({"statusCode" : "E300", "statusDetail": "error getting data for - IMEI : "+imei});
+            res.json({"statusCode" : "E310", "statusDetail": "error getting data for - IMEI : "+imei});
         }
     })
 });
